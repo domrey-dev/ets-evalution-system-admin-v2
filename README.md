@@ -1,4 +1,4 @@
-# EST-Engineer Evaluation System
+# EST-Engineer Evaluation
 
 ## Installation
 
