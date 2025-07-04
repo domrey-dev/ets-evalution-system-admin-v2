@@ -10,10 +10,31 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
+                            <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <!-- Dashboard Link -->
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+
+                    <!-- Project Link -->
+                    <x-nav-link :href="route('project.index')" :active="request()->routeIs('project.*')">
+                        {{ __('Project') }}
+                    </x-nav-link>
+
+                    <!-- Department Link -->
+                    <x-nav-link :href="route('department.index')" :active="request()->routeIs('department.*')">
+                        {{ __('Department') }}
+                    </x-nav-link>
+
+                    <!-- Staff Link -->
+                    <x-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
+                        {{ __('Staff') }}
+                    </x-nav-link>
+
+                    <!-- Evaluation Link -->
+                    <x-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
+                        {{ __('Evaluation') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -67,8 +88,29 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
+            <!-- Mobile Dashboard Link -->
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+
+            <!-- Mobile Project Link -->
+            <x-responsive-nav-link :href="route('project.index')" :active="request()->routeIs('project.*')">
+                {{ __('Project') }}
+            </x-responsive-nav-link>
+
+            <!-- Mobile Department Link -->
+            <x-responsive-nav-link :href="route('department.index')" :active="request()->routeIs('department.*')">
+                {{ __('Department') }}
+            </x-responsive-nav-link>
+
+            <!-- Mobile Staff Link -->
+            <x-responsive-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
+                {{ __('Staff') }}
+            </x-responsive-nav-link>
+
+            <!-- Mobile Evaluation Link -->
+            <x-responsive-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
+                {{ __('Evaluation') }}
             </x-responsive-nav-link>
         </div>
 

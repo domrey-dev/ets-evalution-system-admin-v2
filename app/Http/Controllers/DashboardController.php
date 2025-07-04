@@ -180,26 +180,26 @@ class DashboardController extends Controller
             ];
         }
 
-        $activeTasks = TaskResource::collection($activeTasks);
-        return inertia(
-            'Dashboard',
-            compact(
-                'totalPendingTasks',
-                'myPendingTasks',
-                'totalProgressTasks',
-                'myProgressTasks',
-                'totalCompletedTasks',
-                'myCompletedTasks',
-                'activeTasks',
-                'projects',
-                'departments',
-                'gradeDistribution',
-                'monthlyPerformance',
-                'projectPerformance',
-                'departmentPerformance',
-                'monthOptions',
-                'formattedGradeData'
-            )
-        );
+        // Convert active tasks for Blade (not Inertia resource)
+        // $activeTasks = TaskResource::collection($activeTasks); // Remove this line
+        
+        // FIXED: Return Blade view instead of Inertia
+        return view('dashboard', compact(
+            'totalPendingTasks',
+            'myPendingTasks',
+            'totalProgressTasks',
+            'myProgressTasks',
+            'totalCompletedTasks',
+            'myCompletedTasks',
+            'activeTasks',
+            'projects',
+            'departments',
+            'gradeDistribution',
+            'monthlyPerformance',
+            'projectPerformance',
+            'departmentPerformance',
+            'monthOptions',
+            'formattedGradeData'
+        ));
     }
 }
