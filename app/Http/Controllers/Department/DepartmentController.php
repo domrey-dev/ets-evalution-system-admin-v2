@@ -7,20 +7,19 @@ use App\Http\Requests\Department\DepartmentRequest;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 
 class DepartmentController extends Controller
 {
 
     public function index()
     {
-        return Inertia::render('Department/Index', [
+        return view('Department/index', [
             'departments' => Department::all(),
         ]);
     }
     public function create()
     {
-        return Inertia::render('Department/Create');
+        return view('Department/create');
     }
     public function store(DepartmentRequest $request)
     {
@@ -33,7 +32,7 @@ class DepartmentController extends Controller
     }
     public function edit(Department $department)
     {
-        return Inertia::render('Department/Edit', [
+        return view('Department/edit', [
             'department' => $department,
         ]);
     }

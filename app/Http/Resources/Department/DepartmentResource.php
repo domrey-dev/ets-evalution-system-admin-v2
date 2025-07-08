@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class DepartmentResource extends ResourceCollection
+class DepartmentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

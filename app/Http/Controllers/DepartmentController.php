@@ -22,7 +22,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $query = Department::query();
+        $query = Department::query()->get();
 
         return inertia("Department/Index", [
             "department" => DepartmentResource::collection($query),

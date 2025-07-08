@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\EvaluationController;
 use Illuminate\Support\Facades\Route;

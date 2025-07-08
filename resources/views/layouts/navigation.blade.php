@@ -27,14 +27,19 @@
                         {{ __('Department') }}
                     </x-nav-link>
 
-                    <!-- Staff Link -->
+                    <!-- Evaluation Forms Link -->
                     <x-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
-                        {{ __('Staff') }}
+                        {{ __('Evaluation Forms') }}
                     </x-nav-link>
 
-                    <!-- Evaluation Link -->
+                    <!-- Evaluator Link -->
                     <x-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
-                        {{ __('Evaluation') }}
+                        {{ __('Evaluator') }}
+                    </x-nav-link>
+                    
+                    <!-- Evaluator Room Link -->
+                    <x-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
+                        {{ __('Evaluation Room') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -103,14 +108,19 @@
                 {{ __('Department') }}
             </x-responsive-nav-link>
 
-            <!-- Mobile Staff Link -->
+            <!-- Mobile Evauation Forms Link -->
             <x-responsive-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
-                {{ __('Staff') }}
+                {{ __('Evaluation Forms') }}
             </x-responsive-nav-link>
 
-            <!-- Mobile Evaluation Link -->
+            <!-- Mobile Evaluator Link -->
             <x-responsive-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
-                {{ __('Evaluation') }}
+                {{ __('Evaluator') }}
+            </x-responsive-nav-link>
+
+            <!-- Mobile Evaluation Room Link -->
+            <x-responsive-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
+                {{ __('Evaluation Room') }}
             </x-responsive-nav-link>
         </div>
 
