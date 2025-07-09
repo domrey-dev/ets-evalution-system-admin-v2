@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  ets-test-db:
+    image: mysql:8.0
+    container_name: ets-mysql-test
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ets_evaluate_db_test
+      MYSQL_USER: ets_evaluate_user_test
+      MYSQL_PASSWORD: tZxHFizMpxll5nA
+    ports:
+      - "3307:3306"
+    volumes:
+      - ets_test_db_data:/var/lib/mysql
+    networks:
+      - ets_network
+
+volumes:
+  ets_test_db_data:
+
+networks:
+  ets_network:
+    external: true 
