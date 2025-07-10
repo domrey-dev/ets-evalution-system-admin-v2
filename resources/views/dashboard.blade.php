@@ -1,6 +1,6 @@
 {{-- resources/views/dashboard.blade.php --}}
 @extends('layouts.authenticated')
-    
+
 @section('title', 'Dashboard')
 
 @section('header')
@@ -26,11 +26,11 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                                 Time Period
                                             </label>
-                                            <select name="month" 
+                                            <select name="month"
                                                     class="w-full h-10 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                                                     onchange="toggleCustomDates()">
                                                 @foreach($monthOptions ?? [] as $option)
-                                                    <option value="{{ $option['value'] }}" 
+                                                    <option value="{{ $option['value'] }}"
                                                             {{ request('month') == $option['value'] ? 'selected' : '' }}>
                                                         {{ $option['label'] }}
                                                     </option>
@@ -44,11 +44,11 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                                 Project
                                             </label>
-                                            <select name="project" 
+                                            <select name="project"
                                                     class="w-full h-10 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                                                 <option value="">All Projects</option>
                                                 @foreach($projects ?? [] as $project)
-                                                    <option value="{{ $project->id }}" 
+                                                    <option value="{{ $project->id }}"
                                                             {{ request('project') == $project->id ? 'selected' : '' }}>
                                                         {{ $project->name }}
                                                     </option>
@@ -59,11 +59,11 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                                 Department
                                             </label>
-                                            <select name="department" 
+                                            <select name="department"
                                                     class="w-full h-10 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                                                 <option value="">All Departments</option>
                                                 @foreach($departments ?? [] as $dept)
-                                                    <option value="{{ $dept['value'] }}" 
+                                                    <option value="{{ $dept['value'] }}"
                                                             {{ request('department') == $dept['value'] ? 'selected' : '' }}>
                                                         {{ $dept['label'] }}
                                                     </option>
@@ -71,37 +71,37 @@
                                             </select>
                                         </div>
                                     </div>
-                                    
+
                                     {{-- Custom date range section --}}
-                                    <div id="customDateRange" 
+                                    <div id="customDateRange"
                                          class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg border border-gray-200 shadow-inner"
                                          style="{{ request('month') != 'custom' ? 'display: none;' : '' }}">
                                         <div class="space-y-2">
                                             <label class="block text-sm font-medium text-gray-700">
                                                 From Date
                                             </label>
-                                            <input type="date" 
+                                            <input type="date"
                                                    name="start_date"
                                                    value="{{ request('start_date') }}"
                                                    class="w-full h-10 border-gray-300 rounded-lg shadow-sm px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50 transition-all duration-200">
                                         </div>
-                                        
+
                                         <div class="space-y-2">
                                             <label class="block text-sm font-medium text-gray-700">
                                                 To Date
                                             </label>
-                                            <input type="date" 
+                                            <input type="date"
                                                    name="end_date"
                                                    value="{{ request('end_date') }}"
                                                    class="w-full h-10 border-gray-300 rounded-lg shadow-sm px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50 transition-all duration-200">
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="hidden lg:block w-px bg-gray-300 mx-4 h-16" id="divider"></div>
-                                
+
                                 <div class="flex flex-row gap-3 lg:flex-shrink-0 lg:self-center">
-                                    <a href="{{ route('dashboard') }}" 
+                                    <a href="{{ route('dashboard') }}"
                                        class="px-4 lg:px-6 py-2.5 bg-gray-600 hover:bg-gray-700 focus:ring-gray-500 text-white font-medium rounded-md shadow-sm transition-colors duration-200 inline-block text-center">
                                         Clear
                                     </a>
@@ -168,7 +168,7 @@
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-2 sm:p-4 lg:p-6 text-gray-900">
                 <h3 class="text-green-500 text-xs sm:text-lg lg:text-2xl font-semibold">
-                    Resing Staff
+                    Reusing Staff
                 </h3>
                 <p class="text-xs sm:text-lg lg:text-xl mt-1 sm:mt-2 lg:mt-4">
                     <span class="mr-1 sm:mr-2">{{ $myCompletedTasks }}</span>/
@@ -242,7 +242,7 @@ function toggleCustomDates() {
     const monthSelect = document.querySelector('select[name="month"]');
     const customDateRange = document.getElementById('customDateRange');
     const divider = document.getElementById('divider');
-    
+
     if (monthSelect.value === 'custom') {
         customDateRange.style.display = 'grid';
         divider.style.height = '8rem';
