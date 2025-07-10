@@ -17,6 +17,11 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
+                    <!-- Staff Link -->
+                    <x-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
+                        {{ __('Staff') }}
+                    </x-nav-link>
+
                     <!-- Project Link -->
                     <x-nav-link :href="route('project.index')" :active="request()->routeIs('project.*')">
                         {{ __('Project') }}
@@ -25,11 +30,6 @@
                     <!-- Department Link -->
                     <x-nav-link :href="route('department.index')" :active="request()->routeIs('department.*')">
                         {{ __('Department') }}
-                    </x-nav-link>
-
-                    <!-- Staff Link -->
-                    <x-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
-                        {{ __('Staff') }}
                     </x-nav-link>
 
                     <!-- Evaluation Link -->
@@ -93,6 +93,10 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
+            <!-- Mobile Staff Link -->
+            <x-responsive-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
+                {{ __('Staff') }}
+            </x-responsive-nav-link>
             <!-- Mobile Project Link -->
             <x-responsive-nav-link :href="route('project.index')" :active="request()->routeIs('project.*')">
                 {{ __('Project') }}
@@ -101,11 +105,6 @@
             <!-- Mobile Department Link -->
             <x-responsive-nav-link :href="route('department.index')" :active="request()->routeIs('department.*')">
                 {{ __('Department') }}
-            </x-responsive-nav-link>
-
-            <!-- Mobile Staff Link -->
-            <x-responsive-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
-                {{ __('Staff') }}
             </x-responsive-nav-link>
 
             <!-- Mobile Evaluation Link -->
