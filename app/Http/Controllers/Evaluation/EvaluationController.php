@@ -8,7 +8,6 @@ use App\Http\Resources\Evaluation\EvaluationResource;
 use App\Models\Evaluations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 
 class EvaluationController extends Controller
 {
@@ -24,7 +23,7 @@ class EvaluationController extends Controller
             })
             ->orderBy('created_at', 'desc')
             ->get();
-        return Inertia::render('Evaluation/Index', [
+        return view('evaluations.index', [
             'evaluations' => EvaluationResource::collection($evaluations),
         ]);
     }
@@ -35,7 +34,7 @@ class EvaluationController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Evaluation/Create');
+        return view('evaluations.create');
     }
 
     /**
@@ -48,7 +47,7 @@ class EvaluationController extends Controller
         $data['updated_by'] = Auth::id();
         Evaluations::create($data);
 
-        return redirect()->route('evaluations.index')->with('success', 'Task created.');
+        return redirect()->route('evaluation.index')->with('success', 'Evaluation created.');
     }
 
     /**
@@ -64,7 +63,7 @@ class EvaluationController extends Controller
 
         logger($total_responses);
 
-        return Inertia::render('Evaluation/Show', [
+        return view('evaluations.show', [
             'evaluation' => new EvaluationResource($evaluation),
             'statistics' => [
                 'total_responses' => $total_responses,
@@ -82,7 +81,7 @@ class EvaluationController extends Controller
             ->findOrFail($evaluation);
 
         $evaluation = new EvaluationResource($evaluation);
-        return Inertia::render('Evaluation/Edit', [
+        return view('evaluations.edit', [
             'evaluation' => $evaluation,
         ]);
     }
@@ -103,7 +102,7 @@ class EvaluationController extends Controller
 
         $evaluations->update($validated);
 
-        return redirect()->route('evaluations.index')->with('success', 'Task updated.');
+        return redirect()->route('evaluation.index')->with('success', 'Evaluation updated.');
     }
 
     /**
@@ -115,6 +114,6 @@ class EvaluationController extends Controller
 
         $evaluation->delete();
 
-        return redirect()->route('evaluations.index')->with('success', 'Evaluation deleted successfully.');
+        return redirect()->route('evaluation.index')->with('success', 'Evaluation deleted successfully.');
     }
 }

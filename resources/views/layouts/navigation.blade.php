@@ -28,7 +28,7 @@
                     </x-nav-link>
 
                     <!-- Evaluation Forms Link -->
-                    <x-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
+                    <x-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
                         {{ __('Evaluation Forms') }}
                     </x-nav-link>
 
@@ -108,18 +108,18 @@
                 {{ __('Department') }}
             </x-responsive-nav-link>
 
-            <!-- Mobile Evauation Forms Link -->
-            <x-responsive-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
+            <!-- Mobile Evaluation Forms Link -->
+            <x-responsive-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
                 {{ __('Evaluation Forms') }}
             </x-responsive-nav-link>
 
             <!-- Mobile Evaluator Link -->
-            <x-responsive-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
+            <x-responsive-nav-link :href="route('evaluation.index')" :active="request()->routeIs('hello.*')">
                 {{ __('Evaluator') }}
             </x-responsive-nav-link>
 
             <!-- Mobile Evaluation Room Link -->
-            <x-responsive-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
+            <x-responsive-nav-link :href="route('evaluation.index')" :active="request()->routeIs('world.*')">
                 {{ __('Evaluation Room') }}
             </x-responsive-nav-link>
         </div>
