@@ -33,12 +33,12 @@
                     </x-nav-link>
 
                     <!-- Evaluator Link -->
-                    <x-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
+                    <x-nav-link :href="route('evaluator.index')" :active="request()->routeIs('evaluator.*')">
                         {{ __('Evaluator') }}
                     </x-nav-link>
                     
-                    <!-- Evaluator Room Link -->
-                    <x-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
+                    <!-- Evaluation Room Link -->
+                    <x-nav-link :href="route('evaluation-room.index')" :active="request()->routeIs('evaluation-room.*')">
                         {{ __('Evaluation Room') }}
                     </x-nav-link>
                 </div>
@@ -114,12 +114,12 @@
             </x-responsive-nav-link>
 
             <!-- Mobile Evaluator Link -->
-            <x-responsive-nav-link :href="route('evaluation.index')" :active="request()->routeIs('hello.*')">
+            <x-responsive-nav-link :href="route('evaluator.index')" :active="request()->routeIs('evaluator.*')">
                 {{ __('Evaluator') }}
             </x-responsive-nav-link>
 
             <!-- Mobile Evaluation Room Link -->
-            <x-responsive-nav-link :href="route('evaluation.index')" :active="request()->routeIs('world.*')">
+            <x-responsive-nav-link :href="route('evaluation-room.index')" :active="request()->routeIs('evaluation-room.*')">
                 {{ __('Evaluation Room') }}
             </x-responsive-nav-link>
         </div>

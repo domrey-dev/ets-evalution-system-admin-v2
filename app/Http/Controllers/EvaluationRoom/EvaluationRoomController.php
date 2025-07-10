@@ -10,7 +10,6 @@ use App\Models\Evaluations;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Inertia\Inertia;
 
 class EvaluationRoomController extends Controller
 {
@@ -29,7 +28,7 @@ class EvaluationRoomController extends Controller
         // Only fetch evaluation results when needed
         $evaluationResults = $this->getEvaluationResults($employeeId);
 
-        return Inertia::render('EvaluationRoom/Index', [
+        return view('evaluation-room.index', [
             'criteria' => EvaluationResource::collection(
                 Evaluations::with(['createdBy', 'updatedBy'])
                     ->orderByDesc('created_at')
@@ -85,7 +84,7 @@ class EvaluationRoomController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Evaluation/Create');
+        return view('evaluation-room.create');
     }
 
     /**
