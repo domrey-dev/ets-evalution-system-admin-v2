@@ -45,8 +45,8 @@ export default function AuthenticatedLayout({auth, header, children}) {
                             </NavLink>)}
 
                             {hasPermission('department-list') && (<NavLink
-                                href={route("department.index")}
-                                active={route().current("department.index")}
+                                href={route("departments.index")}
+                                active={route().current("departments.index")}
                             >
                                 Department
                             </NavLink>)}
@@ -168,8 +168,8 @@ export default function AuthenticatedLayout({auth, header, children}) {
                     </ResponsiveNavLink>)}
 
                     {hasPermission('department-list') && (<ResponsiveNavLink
-                        href={route("department.index")}
-                        active={route().current("department.index")}
+                        href={route("departments.index")}
+                        active={route().current("departments.index")}
                     >
                         Department
                     </ResponsiveNavLink>)}

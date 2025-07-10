@@ -22,7 +22,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $query = Department::query()->get();
+        $query = Department::query();
 
         return inertia("Department/Index", [
             "department" => DepartmentResource::collection($query),
@@ -54,8 +54,8 @@ class DepartmentController extends Controller
         $data['updated_by'] = Auth::id();
         Department::create($data);
 
-        return to_route('department.index')
-            ->with('success', 'Task was created');
+        return to_route('departments.index')
+            ->with('success', 'Department was created');
     }
 
     /**
@@ -99,8 +99,8 @@ class DepartmentController extends Controller
         }
         $task->update($data);
 
-        return to_route('department.index')
-            ->with('success', "Task \"$task->name\" was updated");
+        return to_route('departments.index')
+            ->with('success', "Department was updated");
     }
 
 }

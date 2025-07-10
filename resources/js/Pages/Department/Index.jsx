@@ -34,7 +34,7 @@ export default function Index({ auth, success, departments, queryParams = null }
     setFilters(clearedFilters);
     
     // Automatically apply cleared filters
-    router.get(route("department.index"), {}, {
+    router.get(route("departments.index"), {}, {
       preserveState: true,
       replace: true,
     });
@@ -49,7 +49,7 @@ export default function Index({ auth, success, departments, queryParams = null }
       }
     });
 
-    router.get(route("department.index"), filterData, {
+    router.get(route("departments.index"), filterData, {
       preserveState: true,
       replace: true,
     });

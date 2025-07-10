@@ -13,13 +13,13 @@ class DepartmentController extends Controller
 
     public function index()
     {
-        return view('Department/index', [
+        return view('departments.index', [
             'departments' => Department::all(),
         ]);
     }
     public function create()
     {
-        return view('Department/create');
+        return view('departments.create');
     }
     public function store(DepartmentRequest $request)
     {
@@ -28,11 +28,19 @@ class DepartmentController extends Controller
         $data['updated_by'] = Auth::id();
         Department::create($data);
 
-        return redirect()->route('department.index')->with('success', 'Task created.');
+        return redirect()->route('departments.index')->with('success', 'Department created.');
     }
+
+    public function show(Department $department)
+    {
+        return view('departments.show', [
+            'department' => $department,
+        ]);
+    }
+
     public function edit(Department $department)
     {
-        return view('Department/edit', [
+        return view('departments.edit', [
             'department' => $department,
         ]);
     }
@@ -46,12 +54,12 @@ class DepartmentController extends Controller
 
         $department->update($validated);
 
-        return redirect()->route('department.index')->with('success', 'Task updated.');
+        return redirect()->route('departments.index')->with('success', 'Department updated.');
     }
     public function destroy(Department $department)
     {
         $department->delete();
 
-        return redirect()->route('department.index')->with('success', 'Task deleted.');
+        return redirect()->route('departments.index')->with('success', 'Department deleted.');
     }
 }

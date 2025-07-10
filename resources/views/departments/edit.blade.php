@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Create Department')
+@section('title', 'Edit Department - ' . $department->name)
 
 @section('header')
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
         <div>
-            <h2 class="text-2xl font-bold text-gray-900">Create New Department</h2>
+            <h2 class="text-2xl font-bold text-gray-900">Edit Department</h2>
             <p class="text-sm text-gray-600 mt-1">
-                Add a new department to your organization
+                Update "{{ $department->name }}" department details
             </p>
         </div>
-        <a href="{{ route('department.index') }}" 
+        <a href="{{ route('departments.show', $department->id) }}" 
            class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-all duration-200">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -24,10 +24,11 @@
     <div class="py-8">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <form method="POST" action="{{ route('department.store') }}" class="divide-y divide-gray-200">
+                <form method="POST" action="{{ route('departments.update', $department->id) }}" class="divide-y divide-gray-200">
                     @csrf
+                    @method('PUT')
                     
-                    {{-- Department Icon Section --}}
+                    {{-- Department Header --}}
                     <div class="p-6">
                         <div class="space-y-6">
                             <div class="text-center">
@@ -36,9 +37,9 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                     </svg>
                                 </div>
-                                <h3 class="text-lg font-medium text-gray-900">Department Information</h3>
+                                <h3 class="text-lg font-medium text-gray-900">Update Department Information</h3>
                                 <p class="text-sm text-gray-500 mt-1">
-                                    Provide basic information about the new department
+                                    Modify the department details and information
                                 </p>
                             </div>
                         </div>
@@ -57,7 +58,7 @@
                                             type="text"
                                             id="department_name"
                                             name="name"
-                                            value="{{ old('name') }}"
+                                            value="{{ old('name', $department->name) }}"
                                             class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('name') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
                                             placeholder="e.g., Human Resources, Engineering, Marketing"
                                             autofocus
@@ -83,7 +84,7 @@
                                             rows="4"
                                             class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('description') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
                                             placeholder="Describe the department's role, responsibilities, and objectives..."
-                                        >{{ old('description') }}</textarea>
+                                        >{{ old('description', $department->description) }}</textarea>
                                     </div>
                                     @error('description')
                                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -96,7 +97,7 @@
                     {{-- Form Actions --}}
                     <div class="px-6 py-4 bg-gray-50">
                         <div class="flex items-center justify-end space-x-3">
-                            <a href="{{ route('department.index') }}" 
+                            <a href="{{ route('departments.show', $department->id) }}" 
                                class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -104,11 +105,11 @@
                                 Cancel
                             </a>
                             <button type="submit" 
-                                    class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all create-department-btn">
+                                    class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all update-department-btn">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                 </svg>
-                                <span class="btn-text">Create Department</span>
+                                <span class="btn-text">Update Department</span>
                             </button>
                         </div>
                     </div>
@@ -121,8 +122,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.querySelector('form');
-            const submitBtn = document.querySelector('.create-department-btn');
-            const btnText = document.querySelector('.btn-text');
+            const submitBtn = document.querySelector('.update-department-btn');
             
             form.addEventListener('submit', function() {
                 submitBtn.disabled = true;
@@ -134,7 +134,7 @@
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Creating...
+                    Updating...
                 `;
             });
         });

@@ -70,7 +70,7 @@ class ProjectController extends Controller
         Project::create($data);
 
         // Use redirect instead of to_route for better compatibility
-        return redirect()->route('projects.index')
+        return redirect()->route('project.index')
             ->with('success', 'Project was created');
     }
 

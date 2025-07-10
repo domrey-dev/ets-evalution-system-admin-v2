@@ -35,7 +35,7 @@ export default function Create({ auth }) {
             </p>
           </div>
           <Link
-            href={route("department.index")}
+            href={route("departments.index")}
             className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-all duration-200"
           >
             <XMarkIcon className="w-4 h-4 mr-2" />
@@ -122,7 +122,7 @@ export default function Create({ auth }) {
               <CardContent className="px-6 py-4 bg-gray-50">
                 <div className="flex items-center justify-end space-x-3">
                   <Link
-                    href={route("department.index")}
+                    href={route("departments.index")}
                     className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all"
                   >
                     <XMarkIcon className="w-4 h-4 mr-2" />

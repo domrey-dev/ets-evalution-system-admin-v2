@@ -40,7 +40,7 @@ class EvaluationSelf extends Controller
         $data['updated_by'] = Auth::id();
         EvaluationSelf::create($data);
 
-        return redirect()->route('department.index')->with('success', 'Task created.');
+        return redirect()->route('departments.index')->with('success', 'Evaluation created.');
     }
 
     /**

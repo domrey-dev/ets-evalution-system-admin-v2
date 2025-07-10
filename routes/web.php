@@ -5,7 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\StaffController;
-use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\Evaluation\EvaluationController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -20,7 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('project', ProjectController::class);
     
     // Department routes
-    Route::resource('department', DepartmentController::class);
+    Route::resource('departments', DepartmentController::class);
     
     // Staff routes
     Route::resource('staff', StaffController::class);

@@ -23,7 +23,7 @@
                     </x-nav-link>
 
                     <!-- Department Link -->
-                    <x-nav-link :href="route('department.index')" :active="request()->routeIs('department.*')">
+                    <x-nav-link :href="route('departments.index')" :active="request()->routeIs('departments.*')">
                         {{ __('Department') }}
                     </x-nav-link>
 
@@ -104,7 +104,7 @@
             </x-responsive-nav-link>
 
             <!-- Mobile Department Link -->
-            <x-responsive-nav-link :href="route('department.index')" :active="request()->routeIs('department.*')">
+            <x-responsive-nav-link :href="route('departments.index')" :active="request()->routeIs('departments.*')">
                 {{ __('Department') }}
             </x-responsive-nav-link>
 
