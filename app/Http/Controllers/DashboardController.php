@@ -13,18 +13,18 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-        
+
         // Base queries
         $pendingTasksQuery = Task::query()->where('status', 'pending');
         $progressTasksQuery = Task::query()->where('status', 'in_progress');
         $completedTasksQuery = Task::query()->where('status', 'completed');
-        
+
         // Apply date filters if provided
         if ($request->filled('start_date') && $request->filled('end_date')) {
             // Custom date range filtering
             $startDate = $request->input('start_date');
             $endDate = $request->input('end_date');
-            
+
             $pendingTasksQuery->whereBetween('created_at', [$startDate, $endDate]);
             $progressTasksQuery->whereBetween('created_at', [$startDate, $endDate]);
             $completedTasksQuery->whereBetween('created_at', [$startDate, $endDate]);
@@ -32,25 +32,25 @@ class DashboardController extends Controller
             // Month filtering
             $month = $request->input('month');
             $monthNumber = date('m', strtotime("1 $month 2023"));
-            
+
             $pendingTasksQuery->whereMonth('created_at', $monthNumber);
             $progressTasksQuery->whereMonth('created_at', $monthNumber);
             $completedTasksQuery->whereMonth('created_at', $monthNumber);
         }
-        
+
         // Apply project filter if provided
         if ($request->filled('project')) {
             $projectId = $request->input('project');
-            
+
             $pendingTasksQuery->where('project_id', $projectId);
             $progressTasksQuery->where('project_id', $projectId);
             $completedTasksQuery->where('project_id', $projectId);
         }
-        
+
         // Apply department filter if provided
         if ($request->filled('department')) {
             $departmentId = $request->input('department');
-            
+
             // Filter tasks by users who belong to the selected department
             $pendingTasksQuery->whereHas('assignedUser', function($query) use ($departmentId) {
                 $query->where('department', $departmentId);
@@ -62,14 +62,14 @@ class DashboardController extends Controller
                 $query->where('department', $departmentId);
             });
         }
-        
+
         // Get the counts
         $totalPendingTasks = $pendingTasksQuery->count();
         $myPendingTasks = $pendingTasksQuery->clone()->where('assigned_user_id', $user->id)->count();
-        
+
         $totalProgressTasks = $progressTasksQuery->count();
         $myProgressTasks = $progressTasksQuery->clone()->where('assigned_user_id', $user->id)->count();
-        
+
         $totalCompletedTasks = $completedTasksQuery->count();
         $myCompletedTasks = $completedTasksQuery->clone()->where('assigned_user_id', $user->id)->count();
 
@@ -77,15 +77,15 @@ class DashboardController extends Controller
         $activeTasksQuery = Task::query()
             ->whereIn('status', ['pending', 'in_progress'])
             ->where('assigned_user_id', $user->id);
-            
+
         // Apply the same filters to active tasks
         if ($request->filled('project')) {
             $activeTasksQuery->where('project_id', $request->input('project'));
         }
-        
+
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $activeTasksQuery->whereBetween('created_at', [
-                $request->input('start_date'), 
+                $request->input('start_date'),
                 $request->input('end_date')
             ]);
         } elseif ($request->filled('month')) {
@@ -93,12 +93,12 @@ class DashboardController extends Controller
             $monthNumber = date('m', strtotime("1 $month 2023"));
             $activeTasksQuery->whereMonth('created_at', $monthNumber);
         }
-        
+
         $activeTasks = $activeTasksQuery->limit(10)->get();
 
         $projects = Project::all(['id', 'name']);
 
-        // Fetch departments from database and format for dropdown
+        // Fetch departments from the database and format for dropdown
         $departments = Department::all(['id', 'name'])->map(function ($dept) {
             return [
                 'value' => $dept->name, // Use department name as value for filtering users
@@ -182,7 +182,7 @@ class DashboardController extends Controller
 
         // Convert active tasks for Blade (not Inertia resource)
         // $activeTasks = TaskResource::collection($activeTasks); // Remove this line
-        
+
         // FIXED: Return Blade view instead of Inertia
         return view('dashboard', compact(
             'totalPendingTasks',
