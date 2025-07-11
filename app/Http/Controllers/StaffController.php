@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Staff;
 use Illuminate\Http\Request;
 
 class StaffController extends Controller
@@ -9,9 +10,32 @@ class StaffController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        $query = Staff::with('createdBy'); // Load the relationship for created_by
+
+        $sortField = $request->get("sort_field", 'created_at');
+        $sortDirection = $request->get("sort_direction", "desc");
+
+        // Apply filters
+        if ($request->filled("name")) {
+            $query->where("en_name", "like", "%" . $request->input("name") . "%");
+        }
+
+        if ($request->filled("status")) {
+            $query->where("status", $request->input("status"));
+        }
+
+        $staff = $query->orderBy($sortField, $sortDirection)
+            ->paginate(10)
+            ->withQueryString();
+
+        return view("staff.index", [
+            "staff" => $staff,
+            'queryParams' => $request->query() ?: null,
+        ]);
+
     }
 
     /**
@@ -36,6 +60,7 @@ class StaffController extends Controller
     public function show(string $id)
     {
         //
+
     }
 
     /**
