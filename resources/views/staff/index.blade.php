@@ -7,7 +7,7 @@
 @section('header')
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
         <div>
-            <h2 class="text-2xl font-bold text-gray-900">Projects</h2>
+            <h2 class="text-2xl font-bold text-gray-900">Staff</h2>
             <p class="text-sm text-gray-600 mt-1">
                 Manage and track your projects
             </p>
@@ -98,19 +98,34 @@
                         <thead class="bg-gray-50">
                         <tr>
                             <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12 sm:w-16">
-                                ID
+                                Staff ID
                             </th>
                             <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Project Name
+                                Staff Name
                             </th>
                             <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Description
+                                Phone Number
+                            </th>
+                            <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Work Contract
+                            </th>
+                            <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Gender
+                            </th>
+                            <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Position
+                            </th>
+                            <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Department
                             </th>
                             <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24 sm:w-32">
                                 Status
                             </th>
                             <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24 sm:w-32">
-                                Due Date
+                                Hired Date
+                            </th>
+                            <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24 sm:w-32">
+                                Project
                             </th>
                             <th class="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24 sm:w-32">
                                 Created By
@@ -121,61 +136,89 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($projects as $project)
+                        @forelse($staff as $staff)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
-                                    {{ $project->id }}
+                                    {{ $staff->id }}
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4">
                                     <div class="text-xs sm:text-sm font-medium text-gray-900 truncate">
-                                        {{ $project->name }}
+                                        {{ $staff->en_name }}
                                     </div>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4">
                                     <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
-                                        {{ $project->description ?: "No description" }}
+                                        {{ $staff->phone ?: "No Phone Number" }}
+                                    </div>
+                                </td>
+                                <td class="px-2 sm:px-4 py-3 sm:py-4">
+                                    <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
+                                        {{ $staff->work_contract}}
+                                    </div>
+                                </td>
+                                </td>
+                                <td class="px-2 sm:px-4 py-3 sm:py-4">
+                                    <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
+                                        {{ $staff->gender}}
+                                    </div>
+                                </td>
+                                </td>
+                                <td class="px-2 sm:px-4 py-3 sm:py-4">
+                                    <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
+                                        {{ $staff->position}}
+                                    </div>
+                                </td>
+                                </td>
+                                <td class="px-2 sm:px-4 py-3 sm:py-4">
+                                    <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
+                                        {{ $staff->department}}
+                                    </div>
+                                </td>
+                                <td class="px-2 sm:px-4 py-3 sm:py-4">
+                                    <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
+                                        {{ $staff->project}}
                                     </div>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap">
                                     <span class="inline-flex px-1 sm:px-2 py-1 text-xs font-semibold rounded-full text-white
-                                        @if($project->status == 'pending') bg-yellow-500
-                                        @elseif($project->status == 'in_progress') bg-blue-500
-                                        @elseif($project->status == 'completed') bg-green-500
+                                        @if($staff->status == 'pending') bg-yellow-500
+                                        @elseif($staff->status == 'in_progress') bg-blue-500
+                                        @elseif($staff->status == 'completed') bg-green-500
                                         @else bg-gray-500
                                         @endif">
                                         <span class="hidden sm:inline">
-                                            @if($project->status == 'pending')
+                                            @if($staff->status == 'pending')
                                                 Pending
-                                            @elseif($project->status == 'in_progress')
+                                            @elseif($staff->status == 'in_progress')
                                                 In Progress
-                                            @elseif($project->status == 'completed')
+                                            @elseif($staff->status == 'completed')
                                                 Completed
                                             @else
-                                                {{ ucfirst($project->status) }}
+                                                {{ ucfirst($staff->status) }}
                                             @endif
                                         </span>
                                         <span class="sm:hidden">
-                                            @if($project->status == 'pending')
+                                            @if($staff->status == 'pending')
                                                 Pen
-                                            @elseif($project->status == 'in_progress')
+                                            @elseif($staff->status == 'in_progress')
                                                 Pro
-                                            @elseif($project->status == 'completed')
+                                            @elseif($staff->status == 'completed')
                                                 Com
                                             @else
-                                                {{ substr(ucfirst($project->status), 0, 3) }}
+                                                {{ substr(ucfirst($staff->status), 0, 3) }}
                                             @endif
                                         </span>
                                     </span>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                                    {{ $project->due_date ? Carbon::parse($project->due_date)->format('M d, Y') : '-' }}
+                                    {{ $staff->due_date ? Carbon::parse($staff->due_date)->format('M d, Y') : '-' }}
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                                    {{ $project->createdBy->name ?? '-' }}
+                                    {{ $staff->createdBy->name ?? '-' }}
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-right text-xs sm:text-sm font-medium">
                                     <div class="flex items-center justify-end space-x-1 sm:space-x-2">
-                                        <a href="{{ route('staff.show', $project->id) }}"
+                                        <a href="{{ route('staff.show', $staff->id) }}"
                                            class="text-blue-600 hover:text-blue-900 transition-colors"
                                            title="View">
                                             <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor"
@@ -186,7 +229,7 @@
                                                       d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                             </svg>
                                         </a>
-                                        <a href="{{ route('staff.edit', $project->id) }}"
+                                        <a href="{{ route('staff.edit', $staff->id) }}"
                                            class="text-emerald-600 hover:text-emerald-900 transition-colors"
                                            title="Edit">
                                             <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor"
@@ -195,7 +238,7 @@
                                                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                             </svg>
                                         </a>
-                                        <form method="POST" action="{{ route('staff.destroy', $project->id) }}"
+                                        <form method="POST" action="{{ route('staff.destroy', $staff->id) }}"
                                               class="inline"
                                               onsubmit="return confirm('Are you sure you want to delete this project?')">
                                             @csrf
@@ -246,12 +289,12 @@
                 </div>
             </div>
 
-             Pagination
-            @if($projects->hasPages())
-                <div class="mt-6">
-                    {{ $projects->appends(request()->query())->links() }}
-                </div>
-            @endif
+{{--             Pagination--}}
+{{--            @if($staff->hasPages())--}}
+{{--                <div class="mt-6">--}}
+{{--                    {{ $staff->appends(request()->query())->links() }}--}}
+{{--                </div>--}}
+{{--            @endif--}}
         </div>
     </div>
 @endsection
