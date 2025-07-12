@@ -1,17 +1,17 @@
 {{-- resources/views/projects/create.blade.php --}}
 @extends('layouts.app')
 
-@section('title', 'Create Project')
+@section('title', 'Create Staff')
 
 @section('header')
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
         <div>
-            <h2 class="text-2xl font-bold text-gray-900">Create Project</h2>
+            <h2 class="text-2xl font-bold text-gray-900">Create Staff</h2>
             <p class="text-sm text-gray-600 mt-1">
-                Create a new project
+                Create a new Staff
             </p>
         </div>
-        <a href="{{ route('project.index') }}"
+        <a href="{{ route('staff.index') }}"
            class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-all duration-200">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -25,9 +25,9 @@
 <div class="py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <form method="POST" action="{{ route('project.store') }}" enctype="multipart/form-data" class="divide-y divide-gray-200">
+            <form method="POST" action="{{ route('staff.store') }}" enctype="multipart/form-data" class="divide-y divide-gray-200">
                 @csrf
-                
+
                 {{-- Project Image Section --}}
                 <!-- <div class="p-6">
                     <div class="space-y-6">
@@ -68,7 +68,7 @@
                         <div>
                             <h3 class="text-lg font-medium text-gray-900 mb-4">Project Details</h3>
                         </div>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {{-- Project Name --}}
                             <div class="md:col-span-2">
@@ -161,13 +161,13 @@
                 {{-- Form Actions --}}
                 <div class="px-6 py-4 bg-gray-50">
                     <div class="flex items-center justify-end space-x-3">
-                        <a href="{{ route('project.index') }}"
+                        <a href="{{ route('staff.index') }}"
                            class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all">
                             Cancel
                         </a>
                         <button type="submit"
                                 class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all">
-                            Create Project
+                            Create Staff
                         </button>
                     </div>
                 </div>

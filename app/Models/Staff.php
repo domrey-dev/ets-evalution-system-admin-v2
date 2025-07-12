@@ -26,11 +26,11 @@ class Staff extends Model
         'end_of_work',
         'created_by',
         'updated_by',
-        'department_id',
-        'position_id',
-        'project_id',
-        'user_id',
-        'role_id'
+//        'department_id',
+//        'position_id',
+//        'project_id',
+//        'user_id',
+//        'role_id'
     ];
     public function createdBy(): BelongsTo
     {
@@ -40,10 +40,10 @@ class Staff extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-    public function evaluations(): HasMany
-    {
-        return $this->hasMany(EvaluationResult::class, 'staff_id');
-    }
+//    public function evaluations(): HasMany
+//    {
+//        return $this->hasMany(EvaluationResult::class, 'staff_id');
+//    }
     public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
@@ -52,17 +52,13 @@ class Staff extends Model
     {
         return $this->belongsTo(Position::class);
     }
-    public function project(): BelongsTo
+    public function project(): HasMany
     {
-        return $this->belongsTo(Project::class);
+        return $this->hasMany(Project::class, 'id', 'project_id');
     }
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-    public function tasks(): HasMany
-    {
-        return $this->hasMany(Task::class);
     }
 
 }

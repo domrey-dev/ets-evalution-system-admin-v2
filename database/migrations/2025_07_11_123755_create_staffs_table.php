@@ -28,10 +28,10 @@ return new class extends Migration
             $table->date('end_of_work')->nullable();
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');
-            $table->foreignId('department_id')->constrained('department');
-            $table->foreignId('position_id')->constrained('position');
-            $table->foreignId('project_id')->constrained('projects');
-            $table->foreignId('role_id')->constrained('role');
+//            $table->foreignId('department_id')->constrained('department');
+//            $table->foreignId('position_id')->constrained('position');
+//            $table->foreignId('project_id')->nullable()->constrained();
+//            $table->foreignId('role_id')->constrained('role');
             $table->rememberToken();
             $table->timestamps();
         });
