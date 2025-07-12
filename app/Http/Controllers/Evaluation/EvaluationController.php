@@ -23,7 +23,7 @@ class EvaluationController extends Controller
             })
             ->orderBy('created_at', 'desc')
             ->get();
-        return view('evaluations.index', [
+        return view('evaluation.index', [
             'evaluations' => EvaluationResource::collection($evaluations),
         ]);
     }

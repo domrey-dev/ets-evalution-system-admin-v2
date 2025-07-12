@@ -26,14 +26,26 @@ class UserController extends Controller
         if (request("email")) {
             $query->where("email", "like", "%" . request("email") . "%");
         }
+        if (request("phone")) {
+            $query->where("phone", "like", "%" . request("phone") . "%");
+        }
+        if (request("role")) {
+            $query->where("role", "like", "%" . request("role") . "%");
+        }
+        if (request("work_contract")) {
+            $query->where("work_contract", request("work_contract"));
+        }
+        if (request("gender")) {
+            $query->where("gender", request("gender"));
+        }
 
         $users = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
             ->onEachSide(1);
 
-        return inertia("User/Index", [
-            "users" => UserCrudResource::collection($users),
-            'queryParams' => request()->query() ?: null,
+        return view('users.index', [
+            'users' => $users,
+            'search' => request('name'),
             'success' => session('success'),
         ]);
     }
@@ -43,7 +55,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return inertia("User/Create");
+        return view('users.create');
     }
 
     /**
@@ -65,7 +77,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return view('users.show', [
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -73,8 +87,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return inertia('User/Edit', [
-            'user' => new UserCrudResource($user),
+        return view('users.edit', [
+            'user' => $user,
         ]);
     }
 

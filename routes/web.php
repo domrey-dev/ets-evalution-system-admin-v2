@@ -33,6 +33,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Evaluation Room routes
     Route::resource('evaluation-room', EvaluationRoomController::class);
     
+    // User management routes
+    Route::resource('users', App\Http\Controllers\UserController::class);
+    
     // Evaluator routes
     Route::prefix('evaluator')->name('evaluator.')->group(function () {
         Route::get('/', [EvaluatorController::class, 'index'])->name('index');

@@ -29,11 +29,9 @@ class EvaluationRoomController extends Controller
         $evaluationResults = $this->getEvaluationResults($employeeId);
 
         return view('evaluation-room.index', [
-            'criteria' => EvaluationResource::collection(
-                Evaluations::with(['createdBy', 'updatedBy'])
-                    ->orderByDesc('created_at')
-                    ->paginate(25)
-            ),
+            'criteria' => Evaluations::with(['createdBy', 'updatedBy'])
+                ->orderByDesc('created_at')
+                ->get(),
             'model_data' => $modelData,
             'final' => $evaluationResults,
             'filters' => $request->only(['employeeId', 'tab']),

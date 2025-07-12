@@ -13,6 +13,9 @@
 
         <!-- Scripts and Styles -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        
+        <!-- Additional Styles -->
+        @stack('styles')
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -38,5 +41,8 @@
 
         <!-- Alpine.js -->
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        
+        <!-- Additional Scripts -->
+        @stack('scripts')
     </body>
 </html>

@@ -17,24 +17,31 @@ class EvaluatorController extends Controller
      */
     public function index(Request $request)
     {
-        // Get evaluations that this user can evaluate
-        $evaluations = Evaluations::with(['createdBy', 'updatedBy'])
-            ->when($request->input('search'), function ($query) use ($request) {
-                $query->where('title', 'like', '%' . $request->input('search') . '%');
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        // Get users with filtering (since the view expects users data)
+        $query = User::query();
 
-        // Get evaluation results for current user
-        $userEvaluations = EvaluationResult::where('created_by', Auth::id())
-            ->with(['evaluation', 'user'])
-            ->orderBy('created_at', 'desc')
+        if ($request->input('name')) {
+            $query->where('name', 'like', '%' . $request->input('name') . '%');
+        }
+        if ($request->input('phone')) {
+            $query->where('phone', 'like', '%' . $request->input('phone') . '%');
+        }
+        if ($request->input('role')) {
+            $query->where('role', 'like', '%' . $request->input('role') . '%');
+        }
+        if ($request->input('work_contract')) {
+            $query->where('work_contract', $request->input('work_contract'));
+        }
+        if ($request->input('gender')) {
+            $query->where('gender', $request->input('gender'));
+        }
+
+        $users = $query->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('evaluator.index', [
-            'evaluations' => EvaluationResource::collection($evaluations),
-            'userEvaluations' => $userEvaluations,
-            'search' => $request->input('search'),
+            'users' => $users,
+            'search' => $request->input('name'),
         ]);
     }
 
