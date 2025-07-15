@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Evaluation\EvaluationController;
+use App\Http\Controllers\Position\PositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
@@ -27,6 +28,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Evaluation routes
     Route::resource('evaluation', EvaluationController::class);
+
+    // Position routes
+    Route::resource('position', PositionController::class);
 
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

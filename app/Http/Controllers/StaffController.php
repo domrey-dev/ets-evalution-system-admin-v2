@@ -13,7 +13,7 @@ class StaffController extends Controller
     public function index(Request $request)
     {
         //
-        $query = Staff::with('createdBy', 'project'); // Load the relationship for created_by
+        $query = Staff::with('createdBy', 'project', 'position'); // Load the relationship for created_by
 
         $sortField = $request->get("sort_field", 'created_at');
         $sortDirection = $request->get("sort_direction", "desc");

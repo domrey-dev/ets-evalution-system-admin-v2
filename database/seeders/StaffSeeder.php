@@ -15,6 +15,6 @@ class StaffSeeder extends Seeder
     public function run(): void
     {
         //
-        Staff::factory()->count(5)->create();
+        Staff::factory()->state(['position_id' => 1])->create();
     }
 }
