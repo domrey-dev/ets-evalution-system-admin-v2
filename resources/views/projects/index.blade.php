@@ -246,7 +246,7 @@
                 </div>
             </div>
 
-             Pagination
+             
              <x-pagination :paginator="$projects" />
         </div>
     </div>
