@@ -246,12 +246,8 @@
                 </div>
             </div>
 
-             Pagination
-            @if($projects->hasPages())
-                <div class="mt-6">
-                    {{ $projects->appends(request()->query())->links() }}
-                </div>
-            @endif
+             
+             <x-pagination :paginator="$projects" />
         </div>
     </div>
 @endsection
