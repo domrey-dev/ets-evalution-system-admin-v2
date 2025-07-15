@@ -27,7 +27,7 @@ class Staff extends Model
         'created_by',
         'updated_by',
 //        'department_id',
-//        'position_id',
+        'position_id',
 //        'project_id',
 //        'user_id',
 //        'role_id'
@@ -40,10 +40,6 @@ class Staff extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-//    public function evaluations(): HasMany
-//    {
-//        return $this->hasMany(EvaluationResult::class, 'staff_id');
-//    }
     public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
@@ -60,5 +56,6 @@ class Staff extends Model
     {
         return $this->belongsTo(User::class);
     }
+
 
 }
