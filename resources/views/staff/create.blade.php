@@ -28,40 +28,6 @@
             <form method="POST" action="{{ route('staff.store') }}" enctype="multipart/form-data" class="divide-y divide-gray-200">
                 @csrf
 
-                {{-- Project Image Section --}}
-                <!-- <div class="p-6">
-                    <div class="space-y-6">
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">
-                                Add Project Image
-                            </h3>
-                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-gray-400 transition-colors">
-                                <div class="space-y-1 text-center">
-                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                    <div class="flex text-sm text-gray-600">
-                                        <label for="project_image_path"
-                                               class="relative cursor-pointer bg-white rounded-md font-medium text-emerald-600 hover:text-emerald-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-emerald-500">
-                                            <span>Upload a file</span>
-                                            <input id="project_image_path"
-                                                   name="image"
-                                                   type="file"
-                                                   class="sr-only"
-                                                   accept="image/*" />
-                                        </label>
-                                        <p class="pl-1">or drag and drop</p>
-                                    </div>
-                                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                                </div>
-                            </div>
-                            @error('image')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                </div> -->
-
                 {{-- Project Details Section --}}
                 <div class="p-6">
                     <div class="space-y-6">
