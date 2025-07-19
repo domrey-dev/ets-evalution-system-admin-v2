@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Position;
 use App\Models\Staff;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StaffController extends Controller
 {
@@ -44,6 +46,7 @@ class StaffController extends Controller
     public function create()
     {
         //
+        return view('staff.create', ['title' => 'Staff']);
     }
 
     /**
@@ -52,6 +55,11 @@ class StaffController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request->validated();
+        $data['created_by'] = Auth::id();
+        $data['updated_by'] = Auth::id();
+        Staff::create($data);
+        return redirect()->route('staff.index')->with('success', 'Task created.');
     }
 
     /**
@@ -60,6 +68,10 @@ class StaffController extends Controller
     public function show(string $id)
     {
         //
+        $staff = Staff::query()
+            ->with(['createdBy', 'project', 'position'])
+            ->findOrFail($id);
+        return view('staff.show', ['staff' => $staff, 'title' => 'Staff']);
 
     }
 
@@ -69,6 +81,10 @@ class StaffController extends Controller
     public function edit(string $id)
     {
         //
+        $staff = Staff::query()
+            ->with(['createdBy', 'project', 'position'])
+            ->findOrFail($id);
+        return view('staff.edit', ['staff' => $staff, 'title' => 'Staff']);
     }
 
     /**
@@ -77,6 +93,14 @@ class StaffController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $validated = $request->validate([
+            'en_name' => 'required|string|max:255'
+        ]);
+        $staff = Staff::query()
+            ->with(['createdBy', 'project', 'position'])
+            ->findOrFail($id);
+        $staff->update($validated);
+        return redirect()->route('staff.index')->with('success', 'Task updated.');
     }
 
     /**
@@ -85,5 +109,10 @@ class StaffController extends Controller
     public function destroy(string $id)
     {
         //
+        $staff = Staff::query()
+            ->with(['createdBy', 'project', 'position'])
+            ->findOrFail($id);
+        $staff->delete();
+        return redirect()->route('staff.index')->with('success', 'Task deleted.');
     }
 }
