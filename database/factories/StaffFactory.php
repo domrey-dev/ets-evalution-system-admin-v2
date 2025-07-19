@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Position;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -20,24 +21,23 @@ class StaffFactory extends Factory
     public function definition(): array
     {
         return [
-            // 'staff_id' => $this->faker->unique()->numberBetween(1000, 9999),
+            'position_id' => Position::inRandomOrder()->first()->id ?? 1,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'en_name' => $this->faker->name(),
-            'kh_name' => 'ខ្មែរ ' . $this->faker->firstName(),
-            'phone' => '0' . $this->faker->numberBetween(10_000_000, 99_999_999),
-            'work_contract' => $this->faker->randomElement(['Permanent', 'Project-based', 'Internship', 'Subcontract']),
-            'gender' => $this->faker->randomElement(['Male', 'Female']),
-            // 'roles' => $this->faker->randomElement(['admin', 'GM', 'Manager', 'HR', 'Site Manager', 'Site Supervisor', 'Site Team Leader', 'Staff']),
-            'start_of_work' => $this->faker->date(),
-            'end_of_work' => $this->faker->date(),
-            'status' => $this->faker->randomElement(['active', 'inactive']),
+            'en_name' => fake()->name(),
+            'kh_name' => 'ខ្មែរ ' . fake()->firstName(),
+            'phone' => '0' . fake()->numberBetween(10_000_000, 99_999_999),
+            'work_contract' => fake()->randomElement(['Permanent', 'Project-based', 'Internship', 'Subcontract']),
+            'gender' => fake()->randomElement(['Male', 'Female']),
+            'start_of_work' => fake()->date(),
+            'end_of_work' => fake()->date(),
+            'status' => fake()->randomElement(['active', 'inactive']),
             'created_by' => 1,
             'updated_by' => 1,
-            'created_at' => time(),
-            'updated_at' => time(),
+            'created_at' => now(),
+            'updated_at' => now(),
 
         ];
     }
