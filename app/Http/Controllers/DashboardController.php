@@ -53,13 +53,13 @@ class DashboardController extends Controller
 
             // Filter tasks by users who belong to the selected department
             $pendingTasksQuery->whereHas('assignedUser', function($query) use ($departmentId) {
-                $query->where('department', $departmentId);
+                $query->where('department_id', $departmentId);
             });
             $progressTasksQuery->whereHas('assignedUser', function($query) use ($departmentId) {
-                $query->where('department', $departmentId);
+                $query->where('department_id', $departmentId);
             });
             $completedTasksQuery->whereHas('assignedUser', function($query) use ($departmentId) {
-                $query->where('department', $departmentId);
+                $query->where('department_id', $departmentId);
             });
         }
 
@@ -101,7 +101,7 @@ class DashboardController extends Controller
         // Fetch departments from the database and format for dropdown
         $departments = Department::all(['id', 'name'])->map(function ($dept) {
             return [
-                'value' => $dept->name, // Use department name as value for filtering users
+                'value' => $dept->id, // Use department ID as value for filtering users
                 'label' => $dept->name
             ];
         });

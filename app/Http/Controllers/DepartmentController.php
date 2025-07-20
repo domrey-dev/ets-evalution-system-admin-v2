@@ -3,30 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\DepartmentResource;
-use App\Http\Resources\ProjectResource;
-use App\Http\Resources\UserResource;
 use App\Models\Department;
-use App\Models\Project;
-use App\Models\Task;
-use App\Http\Requests\StoreTaskRequest;
-use App\Http\Requests\UpdateTaskRequest;
-use App\Models\User;
+use App\Http\Requests\Department\DepartmentRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $query = Department::query();
+        $query = Department::with('createdBy'); // Load the relationship for created_by
 
-        return inertia("Department/Index", [
-            "department" => DepartmentResource::collection($query),
-            'success' => session('success'),
+        $sortField = $request->get("sort_field", 'created_at');
+        $sortDirection = $request->get("sort_direction", "desc");
+
+        // Apply filters
+        if ($request->filled("name")) {
+            $searchTerm = $request->input("name");
+            $query->whereRaw("LOWER(name) LIKE ?", ["%" . strtolower($searchTerm) . "%"]);
+        }
+
+        $departments = $query->orderBy($sortField, $sortDirection)
+            ->paginate(10)
+            ->withQueryString(); // Preserves query parameters in pagination
+
+        // Return Blade view instead of Inertia
+        return view("departments.index", [
+            "departments" => $departments,
+            'queryParams' => $request->query() ?: null,
         ]);
     }
 
@@ -35,27 +42,26 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        $projects = Project::query()->orderBy('name', 'asc')->get();
-        $users = User::query()->orderBy('name', 'asc')->get();
-
-        return inertia("Task/Create", [
-            'projects' => ProjectResource::collection($projects),
-            'users' => UserResource::collection($users),
-        ]);
+        return view('departments.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTaskRequest $request)
+    public function store(Request $request)
     {
-        $data = $request->validated();
-        $data['created_by'] = Auth::id();
-        $data['updated_by'] = Auth::id();
-        Department::create($data);
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
 
-        return to_route('department.index')
-            ->with('success', 'Task was created');
+        $validatedData['created_by'] = Auth::id();
+        $validatedData['updated_by'] = Auth::id();
+        
+        Department::create($validatedData);
+
+        return redirect()->route('department.index')
+            ->with('success', 'Department was created successfully');
     }
 
     /**
@@ -63,8 +69,8 @@ class DepartmentController extends Controller
      */
     public function show(Department $department)
     {
-        return inertia('Task/Show', [
-            'department' => new DepartmentResource($department),
+        return view('departments.show', [
+            'department' => $department->load('createdBy', 'updatedBy'),
         ]);
     }
 
@@ -73,34 +79,38 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
-        $projects = Project::query()->orderBy('name', 'asc')->get();
-        $users = User::query()->orderBy('name', 'asc')->get();
-
-        return inertia("Task/Edit", [
-            'department' => new DepartmentResource($department),
-            'projects' => ProjectResource::collection($projects),
-            'users' => UserResource::collection($users),
+        return view('departments.edit', [
+            'department' => $department,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaskRequest $request, Task $task)
+    public function update(Request $request, Department $department)
     {
-        $data = $request->validated();
-        $image = $data['image'] ?? null;
-        $data['updated_by'] = Auth::id();
-        if ($image) {
-            if ($task->image_path) {
-                Storage::disk('public')->deleteDirectory(dirname($task->image_path));
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $validatedData['updated_by'] = Auth::id();
+        
+        $department->update($validatedData);
+
+        return redirect()->route('department.index')
+            ->with('success', "Department \"{$department->name}\" was updated successfully");
             }
-            $data['image_path'] = $image->store('task/' . Str::random(), 'public');
-        }
-        $task->update($data);
 
-        return to_route('department.index')
-            ->with('success', "Task \"$task->name\" was updated");
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Department $department)
+    {
+        $name = $department->name;
+        $department->delete();
+
+        return redirect()->route('department.index')
+            ->with('success', "Department \"$name\" was deleted successfully");
     }
-
 }
