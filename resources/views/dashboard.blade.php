@@ -117,7 +117,6 @@
             </div>
         </div>
     </div>
-</div>
 
 {{-- Statistics Cards --}}
 <div class="py-8 sm:py-12">
