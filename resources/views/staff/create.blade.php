@@ -46,7 +46,7 @@
                                            type="text"
                                            name="name"
                                            value="{{ old('name') }}"
-                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('name') border-red-300 @enderror"
+                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('name') @enderror"
                                            placeholder="Enter Staff ID"
                                            required
                                            autofocus />
@@ -66,7 +66,7 @@
                                            type="text"
                                            name="due_date"
                                            value="{{ old('due_date') }}"
-                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') border-red-300 @enderror" />
+                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') @enderror" />
                                 </div>
                                 @error('due_date')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -81,7 +81,7 @@
                                            type="text"
                                            name="due_date"
                                            value="{{ old('due_date') }}"
-                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') border-red-300 @enderror" />
+                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') @enderror" />
                                 </div>
                                 @error('due_date')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -96,7 +96,7 @@
                                            type="text"
                                            name="due_date"
                                            value="{{ old('due_date') }}"
-                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') border-red-300 @enderror" />
+                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') @enderror" />
                                 </div>
                                 @error('due_date')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -109,7 +109,7 @@
                                 <div class="mt-1">
                                     <select name="status"
                                             id="project_status"
-                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') border-red-300 @enderror"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') @enderror"
                                             required>
                                         <option value="">Select Status</option>
                                         <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Male</option>
@@ -134,7 +134,7 @@
                                            type="date"
                                            name="due_date"
                                            value="{{ old('due_date') }}"
-                                           class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') border-red-300 @enderror" />
+                                           class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') @enderror" />
                                 </div>
                                 @error('due_date')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -155,7 +155,7 @@
                                            type="date"
                                            name="due_date"
                                            value="{{ old('due_date') }}"
-                                           class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') border-red-300 @enderror" />
+                                           class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') @enderror" />
                                 </div>
                                 @error('due_date')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -168,7 +168,7 @@
                                 <div class="mt-1">
                                     <select name="status"
                                             id="project_status"
-                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') border-red-300 @enderror"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') @enderror"
                                             required>
                                         <option value="">Select Status</option>
                                         <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Heard HR</option>
@@ -187,7 +187,7 @@
                                 <div class="mt-1">
                                     <select name="status"
                                             id="project_status"
-                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') border-red-300 @enderror"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') @enderror"
                                             required>
                                         <option value="">Select Status</option>
                                         <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Full Time</option>
@@ -206,7 +206,7 @@
                                 <div class="mt-1">
                                     <select name="status"
                                             id="project_status"
-                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') border-red-300 @enderror"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') @enderror"
                                             required>
                                         <option value="">Select Status</option>
                                         <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Engineer</option>
@@ -225,7 +225,7 @@
                                 <div class="mt-1">
                                     <select name="status"
                                             id="project_status"
-                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') border-red-300 @enderror"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') @enderror"
                                             required>
                                         <option value="">Select Status</option>
                                         <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Engineer</option>
@@ -251,7 +251,7 @@
                                     <textarea id="project_description"
                                               name="description"
                                               rows="4"
-                                              class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('description') border-red-300 @enderror"
+                                              class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('description') @enderror"
                                               placeholder="Describe your project goals, requirements, and key details...">{{ old('description') }}</textarea>
                                 </div>
                                 @error('description')
