@@ -22,7 +22,13 @@ class StaffRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'staff_id' => ['required|exists:staff,id'],
+            'en_name' => ['required|string'],
+            'kh_name' => ['required|string'],
+            'gender' => ['required|in:male,female'],
+            'work_contract' => ['required|in:full_time,part_time,contract'],
+            'start_date' => ['required|date'],
+            'status' => ['required|in:active,inactive'],
         ];
     }
 }

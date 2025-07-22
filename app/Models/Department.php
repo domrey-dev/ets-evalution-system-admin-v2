@@ -16,6 +16,7 @@ class Department extends Model
         'description',
         'created_by',
         'updated_by',
+        'staff_id'
     ];
     public function createdBy(): BelongsTo
     {
@@ -30,5 +31,9 @@ class Department extends Model
     public function evaluations(): HasMany
     {
         return $this->hasMany(EvaluationResult::class, 'department_id');
+    }
+    public function staff(): belongsTo
+    {
+        return $this->belongsTo(Staff::class, 'staff_id');
     }
 }
