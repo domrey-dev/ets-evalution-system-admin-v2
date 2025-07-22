@@ -136,89 +136,89 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($staff as $staff)
+                        @forelse($staff as $staffs)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
-                                    {{ $staff->id }}
+                                    {{ $staffs->staff_id }}
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4">
                                     <div class="text-xs sm:text-sm font-medium text-gray-900 truncate">
-                                        {{ $staff->en_name }}
+                                        {{ $staffs->en_name }}
                                     </div>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4">
                                     <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
-                                        {{ $staff->phone ?: "No Phone Number" }}
+                                        {{ $staffs->phone ?: "No Phone Number" }}
                                     </div>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4">
                                     <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
-                                        {{ $staff->work_contract}}
-                                    </div>
-                                </td>
-                                </td>
-                                <td class="px-2 sm:px-4 py-3 sm:py-4">
-                                    <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
-                                        {{ $staff->gender}}
+                                        {{ $staffs->work_contract}}
                                     </div>
                                 </td>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4">
                                     <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
-                                        {{ $staff->position}}
+                                        {{ $staffs->gender}}
                                     </div>
                                 </td>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4">
                                     <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
-                                        {{ $staff->department}}
+                                        {{ $staffs->position}}
+                                    </div>
+                                </td>
+                                </td>
+                                <td class="px-2 sm:px-4 py-3 sm:py-4">
+                                    <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
+                                        {{ $staffs->department}}
                                     </div>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4">
                                     <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
-                                        {{ $staff->project}}
+                                        {{ $staffs->projects}}
                                     </div>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap">
                                     <span class="inline-flex px-1 sm:px-2 py-1 text-xs font-semibold rounded-full text-white
-                                        @if($staff->status == 'pending') bg-yellow-500
-                                        @elseif($staff->status == 'in_progress') bg-blue-500
-                                        @elseif($staff->status == 'completed') bg-green-500
+                                        @if($staffs->status == 'pending') bg-yellow-500
+                                        @elseif($staffs->status == 'in_progress') bg-blue-500
+                                        @elseif($staffs->status == 'completed') bg-green-500
                                         @else bg-gray-500
                                         @endif">
                                         <span class="hidden sm:inline">
-                                            @if($staff->status == 'pending')
+                                            @if($staffs->status == 'pending')
                                                 Pending
-                                            @elseif($staff->status == 'in_progress')
+                                            @elseif($staffs->status == 'in_progress')
                                                 In Progress
-                                            @elseif($staff->status == 'completed')
+                                            @elseif($staffs->status == 'completed')
                                                 Completed
                                             @else
-                                                {{ ucfirst($staff->status) }}
+                                                {{ ucfirst($staffs->status) }}
                                             @endif
                                         </span>
                                         <span class="sm:hidden">
-                                            @if($staff->status == 'pending')
+                                            @if($staffs->status == 'pending')
                                                 Pen
-                                            @elseif($staff->status == 'in_progress')
+                                            @elseif($staffs->status == 'in_progress')
                                                 Pro
-                                            @elseif($staff->status == 'completed')
+                                            @elseif($staffs->status == 'completed')
                                                 Com
                                             @else
-                                                {{ substr(ucfirst($staff->status), 0, 3) }}
+                                                {{ substr(ucfirst($staffs->status), 0, 3) }}
                                             @endif
                                         </span>
                                     </span>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                                    {{ $staff->due_date ? Carbon::parse($staff->due_date)->format('M d, Y') : '-' }}
+                                    {{ $staffs->due_date ? Carbon::parse($staffs->due_date)->format('M d, Y') : '-' }}
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                                    {{ $staff->createdBy->name ?? '-' }}
+                                    {{ $staffs->createdBy->name ?? '-' }}
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-right text-xs sm:text-sm font-medium">
                                     <div class="flex items-center justify-end space-x-1 sm:space-x-2">
-                                        <a href="{{ route('staff.show', $staff->id) }}"
+                                        <a href="{{ route('staff.show', $staffs->id) }}"
                                            class="text-blue-600 hover:text-blue-900 transition-colors"
                                            title="View">
                                             <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor"
@@ -229,7 +229,7 @@
                                                       d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                             </svg>
                                         </a>
-                                        <a href="{{ route('staff.edit', $staff->id) }}"
+                                        <a href="{{ route('staff.edit', $staffs->id) }}"
                                            class="text-emerald-600 hover:text-emerald-900 transition-colors"
                                            title="Edit">
                                             <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor"
@@ -238,7 +238,7 @@
                                                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                             </svg>
                                         </a>
-                                        <form method="POST" action="{{ route('staff.destroy', $staff->id) }}"
+                                        <form method="POST" action="{{ route('staff.destroy', $staffs->id) }}"
                                               class="inline"
                                               onsubmit="return confirm('Are you sure you want to delete this project?')">
                                             @csrf
@@ -289,12 +289,6 @@
                 </div>
             </div>
 
-{{--             Pagination--}}
-{{--            @if($staff->hasPages())--}}
-{{--                <div class="mt-6">--}}
-{{--                    {{ $staff->appends(request()->query())->links() }}--}}
-{{--                </div>--}}
-{{--            @endif--}}
         </div>
     </div>
 @endsection

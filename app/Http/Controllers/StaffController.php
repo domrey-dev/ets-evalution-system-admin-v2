@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Staff\StaffRequest;
+use App\Models\Department;
 use App\Models\Position;
+use App\Models\Project;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,8 +17,8 @@ class StaffController extends Controller
      */
     public function index(Request $request)
     {
-        //
-        $query = Staff::with('createdBy', 'project', 'position'); // Load the relationship for created_by
+
+        $query = Staff::with('createdBy', 'projects', 'position', 'department'); // Load the relationship
 
         $sortField = $request->get("sort_field", 'created_at');
         $sortDirection = $request->get("sort_direction", "desc");
@@ -32,7 +35,6 @@ class StaffController extends Controller
         $staff = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
             ->withQueryString();
-
         return view("staff.index", [
             "staff" => $staff,
             'queryParams' => $request->query() ?: null,
@@ -52,12 +54,16 @@ class StaffController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StaffRequest $request)
     {
-        //
         $data = $request->validated();
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
+        $data['status'] = 1;
+        $data['department_id'] = Department::query()->first()->id;
+        $data['position_id'] = Position::query()->first()->id;
+        $data['project_id'] = Project::query()->first()->id;
+        $data['start_date'] = date('Y-m-d');
         Staff::create($data);
         return redirect()->route('staff.index')->with('success', 'Task created.');
     }
