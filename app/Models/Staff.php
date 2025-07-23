@@ -51,14 +51,7 @@ class Staff extends Model
         return $this->belongsTo(Project::class );
     }
 
-    public function evaluations(): HasMany
-    {
-        return $this->hasMany(EvaluationResult::class, 'staff_id');
-    }
-    public function evaluationsSelf(): HasMany
-    {
-        return $this->hasMany(EvaluationSelf::class, 'staff_id');
-    }
+    // Old relationships removed - using new evaluation system
 
     public function user(): BelongsTo
     {

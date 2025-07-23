@@ -6,7 +6,8 @@ use App\Constants\ConstUserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EvaluationRoom\EvaluationRoomRequest;
 use App\Http\Resources\Evaluation\EvaluationResource;
-use App\Models\EvaluationResult;
+use App\Models\EvaluationSummary;
+use App\Models\EvaluationCriteriaResponse;
 use App\Models\Evaluations;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -79,12 +80,12 @@ class EvaluationRoomController extends Controller
         $selfEvaluation = null;
         
         if ($activeTab === 'final' && $employeeId) {
-            $staffEvaluation = EvaluationResult::with('childEvaluations.evaluation')
+            $staffEvaluation = EvaluationSummary::with(['criteriaResponses.evaluationCriteria', 'evaluation'])
                 ->where('user_id', $employeeId)
                 ->where('evaluation_type', 'staff')
                 ->first();
                 
-            $selfEvaluation = EvaluationResult::with('childEvaluations.evaluation')
+            $selfEvaluation = EvaluationSummary::with(['criteriaResponses.evaluationCriteria', 'evaluation'])
                 ->where('user_id', $employeeId)
                 ->where('evaluation_type', 'self')
                 ->first();
@@ -132,16 +133,16 @@ class EvaluationRoomController extends Controller
     protected function getEvaluationResults($employeeId)
     {
         return [
-            'self' => EvaluationResult::query()
+            'self' => EvaluationSummary::query()
                     ->where('evaluation_type', 'self')
                     ->where('user_id', $employeeId)
-                    ->with('childEvaluations')
+                    ->with(['criteriaResponses.evaluationCriteria', 'evaluation'])
                     ->first() ?? [],
 
-            'staff' => EvaluationResult::query()
+            'staff' => EvaluationSummary::query()
                     ->where('evaluation_type', 'staff')
                     ->where('user_id', $employeeId)
-                    ->with('childEvaluations')
+                    ->with(['criteriaResponses.evaluationCriteria', 'evaluation'])
                     ->first() ?? [],
         ];
     }
@@ -166,37 +167,88 @@ class EvaluationRoomController extends Controller
      */
     public function store(EvaluationRoomRequest $request)
     {
-        $validated = $request->validated();
+        // Debug: Log all request data for final evaluations
+        if ($request->input('evaluation_type') === 'final') {
+            logger()->info('🎯 Final evaluation submission received:', [
+                'evaluation_type' => $request->input('evaluation_type'),
+                'model_data' => $request->input('model_data'),
+                'evaluation' => $request->input('evaluation'),
+                'summary' => $request->input('summary'),
+                'all_data' => $request->all(),
+            ]);
+            
+            // Additional debugging
+            logger()->info('🔍 Final evaluation key checks:', [
+                'has_model_data' => $request->has('model_data'),
+                'has_evaluation' => $request->has('evaluation'),
+                'has_summary' => $request->has('summary'),
+                'model_data_keys' => $request->has('model_data') ? array_keys($request->input('model_data')) : [],
+                'evaluation_keys' => $request->has('evaluation') ? array_keys($request->input('evaluation')) : [],
+                'summary_keys' => $request->has('summary') ? array_keys($request->input('summary')) : [],
+                         ]);
+         }
+
+        try {
+            $validated = $request->validated();
+            
+            if ($request->input('evaluation_type') === 'final') {
+                logger()->info('✅ Final evaluation validation passed', [
+                    'validated_data' => $validated
+                ]);
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($request->input('evaluation_type') === 'final') {
+                logger()->error('❌ Final evaluation validation failed:', [
+                    'errors' => $e->errors(),
+                    'request_data' => $request->all()
+                ]);
+            }
+            throw $e;
+        }
 
         try {
             DB::beginTransaction();
 
-            $parentEvaluation = EvaluationResult::create([
-                'monthly_performance' => $validated['model_data']['monthlyPerformance'],
-                'evaluation_date' => $validated['model_data']['evaluationDate'],
-                'evaluation_type' => $validated['evaluation_type'],
+            // Get the evaluations_id from the first criteria (they should all belong to the same evaluation)
+            $firstCriteriaId = $validated['evaluation']['child_evaluations'][0]['evaluation_id'];
+            $criteria = \App\Models\EvaluationCriteria::find($firstCriteriaId);
+            $evaluationsId = $criteria ? $criteria->evaluations_id : null;
+
+            // Check for duplicate final evaluations
+            if ($validated['evaluation_type'] === 'final') {
+                $existingFinalEvaluation = EvaluationSummary::where('user_id', $validated['model_data']['searchId'])
+                    ->where('evaluation_type', 'final')
+                    ->where('evaluations_id', $evaluationsId)
+                    ->first();
+
+                if ($existingFinalEvaluation) {
+                    return back()->withInput()
+                        ->with('error', 'A final evaluation already exists for this user. Please edit the existing one instead.');
+                }
+            }
+
+            // Create evaluation summary record (NEW STRUCTURE)
+            $evaluationSummary = EvaluationSummary::create([
+                'evaluations_id' => $evaluationsId,
                 'user_id' => $validated['model_data']['searchId'],
-                // Section 3: Summary fields
-                'improvement_points' => $validated['summary']['improvement_points'],
+                'evaluation_type' => $validated['evaluation_type'],
+                'evaluation_date' => $validated['model_data']['evaluationDate'],
                 'total_score' => $validated['summary']['total_score'],
                 'grade' => $validated['summary']['grade'],
+                'improvement_points' => $validated['summary']['improvement_points'],
                 'evaluator_name' => $validated['summary']['evaluator_name'],
                 'summary_date' => $validated['summary']['evaluation_date'],
                 'created_by' => auth()->id(),
                 'updated_by' => auth()->id(),
             ]);
 
-            // Handle child evaluations from the payload
+            // Create criteria responses (NEW STRUCTURE)
             foreach ($validated['evaluation']['child_evaluations'] as $childEvaluation) {
-                EvaluationResult::create([
-                    'parent_evaluation_id' => $parentEvaluation->id,
-                    'evaluation_id' => $childEvaluation['evaluation_id'],
-                    'feedback' => $childEvaluation['feedback'],
+                EvaluationCriteriaResponse::create([
+                    'evaluation_summary_id' => $evaluationSummary->id,
+                    'evaluation_criteria_id' => $childEvaluation['evaluation_id'],
                     'rating' => $childEvaluation['rating'],
-                    'evaluation_type' => $validated['evaluation_type'],
-                    'user_id' => $validated['model_data']['searchId'],
-                    'created_by' => auth()->id(),
-                    'updated_by' => auth()->id(),
+                    'feedback' => $childEvaluation['feedback'],
                 ]);
             }
 
@@ -207,10 +259,21 @@ class EvaluationRoomController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            logger()->error('Evaluation creation failed: ' . $e->getMessage());
+            logger()->error('Evaluation creation failed: ' . $e->getMessage(), [
+                'exception' => $e,
+                'trace' => $e->getTraceAsString(),
+                'evaluation_type' => $request->input('evaluation_type'),
+                'user_id' => $request->input('model_data.searchId'),
+            ]);
+
+            // More specific error message for debugging
+            $errorMessage = 'Failed to create evaluation. Please try again.';
+            if (app()->environment('local')) {
+                $errorMessage .= ' Error: ' . $e->getMessage();
+            }
 
             return back()->withInput()
-                ->with('error', 'Failed to create evaluation. Please try again.');
+                ->with('error', $errorMessage);
         }
     }
 
@@ -219,7 +282,7 @@ class EvaluationRoomController extends Controller
      */
     public function show(string $id)
     {
-        $evaluation = EvaluationResult::with(['user', 'evaluation', 'childEvaluations'])
+        $evaluation = EvaluationSummary::with(['user', 'evaluation', 'criteriaResponses.evaluationCriteria'])
             ->findOrFail($id);
 
         return view('evaluation-room.show', [
@@ -231,14 +294,14 @@ class EvaluationRoomController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(EvaluationResult $evaluationRoom)
+    public function edit(EvaluationSummary $evaluationRoom)
     {
         $criteria = Evaluations::with(['createdBy', 'updatedBy'])
             ->orderBy('created_at', 'desc')
             ->get();
 
         return view('evaluation-room.edit', [
-            'evaluation' => $evaluationRoom->load(['user', 'evaluation', 'childEvaluations']),
+            'evaluation' => $evaluationRoom->load(['user', 'evaluation', 'criteriaResponses.evaluationCriteria']),
             'criteria' => $criteria,
             'title' => 'Edit Evaluation'
         ]);
@@ -247,36 +310,36 @@ class EvaluationRoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(EvaluationRoomRequest $request, EvaluationResult $evaluationRoom)
+    public function update(EvaluationRoomRequest $request, EvaluationSummary $evaluationRoom)
     {
         $validated = $request->validated();
 
         try {
             DB::beginTransaction();
 
-            // Update parent evaluation
+            // Update evaluation summary
             $evaluationRoom->update([
-                'monthly_performance' => $validated['model_data']['monthlyPerformance'],
+                'total_score' => $validated['summary']['total_score'],
                 'evaluation_date' => $validated['model_data']['evaluationDate'],
                 'evaluation_type' => $validated['evaluation_type'],
                 'user_id' => $validated['model_data']['searchId'],
+                'grade' => $validated['summary']['grade'],
+                'improvement_points' => $validated['summary']['improvement_points'],
+                'evaluator_name' => $validated['summary']['evaluator_name'],
+                'summary_date' => $validated['summary']['evaluation_date'],
                 'updated_by' => auth()->id(),
             ]);
 
-            // Delete existing child evaluations
-            $evaluationRoom->childEvaluations()->delete();
+            // Delete existing criteria responses
+            $evaluationRoom->criteriaResponses()->delete();
 
-            // Create new child evaluations
+            // Create new criteria responses
             foreach ($validated['evaluation']['child_evaluations'] as $childEvaluation) {
-                EvaluationResult::create([
-                    'parent_evaluation_id' => $evaluationRoom->id,
-                    'evaluation_id' => $childEvaluation['evaluation_id'],
+                EvaluationCriteriaResponse::create([
+                    'evaluation_summary_id' => $evaluationRoom->id,
+                    'evaluation_criteria_id' => $childEvaluation['evaluation_id'],
                     'feedback' => $childEvaluation['feedback'],
                     'rating' => $childEvaluation['rating'],
-                    'evaluation_type' => $validated['evaluation_type'],
-                    'user_id' => $validated['model_data']['searchId'],
-                    'created_by' => auth()->id(),
-                    'updated_by' => auth()->id(),
                 ]);
             }
 
@@ -297,15 +360,15 @@ class EvaluationRoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(EvaluationResult $evaluationRoom)
+    public function destroy(EvaluationSummary $evaluationRoom)
     {
         try {
             DB::beginTransaction();
 
-            // Delete child evaluations first
-            $evaluationRoom->childEvaluations()->delete();
+            // Delete criteria responses first (cascade should handle this, but being explicit)
+            $evaluationRoom->criteriaResponses()->delete();
             
-            // Delete parent evaluation
+            // Delete evaluation summary
             $evaluationRoom->delete();
 
             DB::commit();

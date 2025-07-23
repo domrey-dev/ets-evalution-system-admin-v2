@@ -34,9 +34,7 @@
             {{-- Performance Metrics Cards --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 @php
-                    $staffCount = $department->staff->count();
-                    $completedEvaluations = rand(5, $staffCount); // TODO: Implement actual count
-                    $pendingEvaluations = $staffCount - $completedEvaluations;
+                    $staffCount = $department->users()->count();
                 @endphp
                 
                 <!-- Staff Count Card -->
@@ -89,7 +87,7 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Incomplete Evaluations</dt>
-                                    <dd class="text-lg font-medium text-gray-900">{{ $pendingEvaluations }}</dd>
+                                    <dd class="text-lg font-medium text-gray-900">{{ $incompleteEvaluations }}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -188,12 +186,16 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                                        @forelse($department->staff as $staff)
+                                                        @forelse($department->users as $staff)
                             @php
-                                // Check evaluation statuses (you can implement actual logic later)
-                                $selfEvalStatus = rand(0, 1) ? 'completed' : 'incomplete';
-                                $staffEvalStatus = rand(0, 1) ? 'completed' : 'incomplete';
-                                $finalEvalStatus = rand(0, 1) ? 'completed' : 'incomplete';
+                                // Check actual evaluation statuses from database
+                                $selfEvaluation = $staff->evaluationSummaries->where('evaluation_type', 'self')->first();
+                                $staffEvaluation = $staff->evaluationSummaries->where('evaluation_type', 'staff')->first();
+                                $finalEvaluation = $staff->evaluationSummaries->where('evaluation_type', 'final')->first();
+                                
+                                $selfEvalStatus = $selfEvaluation ? 'completed' : 'incomplete';
+                                $staffEvalStatus = $staffEvaluation ? 'completed' : 'incomplete';
+                                $finalEvalStatus = $finalEvaluation ? 'completed' : 'incomplete';
                             @endphp
                             <tr class="hover:bg-gray-50">
                                 <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">

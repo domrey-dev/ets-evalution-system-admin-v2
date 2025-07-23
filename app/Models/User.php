@@ -83,4 +83,20 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
+
+    /**
+     * Get evaluation summaries for this user (as evaluatee).
+     */
+    public function evaluationSummaries()
+    {
+        return $this->hasMany(EvaluationSummary::class, 'user_id');
+    }
+
+    /**
+     * Get evaluation summaries created by this user (as evaluator).
+     */
+    public function createdEvaluationSummaries()
+    {
+        return $this->hasMany(EvaluationSummary::class, 'created_by');
+    }
 }

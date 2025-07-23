@@ -28,17 +28,14 @@ class Evaluations extends Model
         return $this->hasMany(EvaluationSelf::class);
     }
 
-    public function evaluationResult(): HasMany
-    {
-        return $this->hasMany(EvaluationResult::class, 'evaluation_id');
-    }
+
 
     /**
      * Get the criteria for this evaluation.
      */
     public function criteria(): HasMany
     {
-        return $this->hasMany(EvaluationCriteria::class, 'evaluation_id');
+        return $this->hasMany(EvaluationCriteria::class, 'evaluations_id');
     }
 
     /**
@@ -46,8 +43,16 @@ class Evaluations extends Model
      */
     public function activeCriteria(): HasMany
     {
-        return $this->hasMany(EvaluationCriteria::class, 'evaluation_id')
+        return $this->hasMany(EvaluationCriteria::class, 'evaluations_id')
                     ->where('is_active', true)
                     ->orderBy('order_number');
+    }
+
+    /**
+     * Get evaluation summaries using this template.
+     */
+    public function evaluationSummaries(): HasMany
+    {
+        return $this->hasMany(EvaluationSummary::class, 'evaluations_id');
     }
 }

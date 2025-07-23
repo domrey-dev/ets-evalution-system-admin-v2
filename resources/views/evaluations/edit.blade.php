@@ -59,7 +59,7 @@
                     </div>
                     <div>
                         <span class="text-gray-500">Responses:</span>
-                        <span class="font-medium text-gray-900">{{ $evaluation->evaluationResult->count() }}</span>
+                        <span class="font-medium text-gray-900">{{ $evaluation->evaluationSummaries->count() }}</span>
                     </div>
                     <div>
                         <span class="text-gray-500">Created:</span>

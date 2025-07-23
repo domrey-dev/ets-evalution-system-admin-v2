@@ -106,7 +106,7 @@ class EvaluationSeeder extends Seeder
 
         foreach ($criteria as $criteriaData) {
             EvaluationCriteria::create([
-                'evaluation_id' => $evaluation->id,
+                'evaluations_id' => $evaluation->id,
                 'title_kh' => $criteriaData['title_kh'],
                 'title_en' => $criteriaData['title_en'],
                 'description_kh' => $criteriaData['description_kh'],

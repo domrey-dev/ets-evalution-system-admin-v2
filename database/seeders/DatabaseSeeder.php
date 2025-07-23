@@ -30,14 +30,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create positions first
-        $positions = [
-            ['name' => 'Manager', 'created_by' => $admin->id, 'updated_by' => $admin->id],
-            ['name' => 'Developer', 'created_by' => $admin->id, 'updated_by' => $admin->id],
-            ['name' => 'Designer', 'created_by' => $admin->id, 'updated_by' => $admin->id],
-            ['name' => 'Tester', 'created_by' => $admin->id, 'updated_by' => $admin->id],
-        ];
-
-        Position::insert($positions);
+        Position::create(['name' => 'Manager', 'created_by' => $admin->id, 'updated_by' => $admin->id]);
+        Position::create(['name' => 'Developer', 'created_by' => $admin->id, 'updated_by' => $admin->id]);
+        Position::create(['name' => 'Designer', 'created_by' => $admin->id, 'updated_by' => $admin->id]);
+        Position::create(['name' => 'Tester', 'created_by' => $admin->id, 'updated_by' => $admin->id]);
 
         // Now create other users with proper position references
         User::factory()->create([

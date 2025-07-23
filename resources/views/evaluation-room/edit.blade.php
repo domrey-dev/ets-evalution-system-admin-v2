@@ -203,13 +203,13 @@
                 </div>
                 <div class="px-6 py-4 space-y-6">
                     @php
-                        // Create a map of existing child evaluations for easy lookup
-                        $existingEvaluations = $evaluation->childEvaluations->keyBy('evaluation_id');
+                        // Create a map of existing criteria responses for easy lookup
+                        $existingResponses = $evaluation->criteriaResponses->keyBy('evaluation_criteria_id');
                     @endphp
                     
                     @forelse($criteria as $index => $criterion)
                         @php
-                            $existingEval = $existingEvaluations->get($criterion->id);
+                            $existingResponse = $existingResponses->get($criterion->id);
                         @endphp
                         <div class="border border-gray-200 rounded-lg p-4">
                             <div class="mb-3">
@@ -225,7 +225,7 @@
                                               id="feedback_{{ $criterion->id }}"
                                               rows="3"
                                               placeholder="Write feedback here..."
-                                              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">{{ old("evaluation.child_evaluations.{$index}.feedback", $existingEval->feedback ?? '') }}</textarea>
+                                              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">{{ old("evaluation.child_evaluations.{$index}.feedback", $existingResponse->feedback ?? '') }}</textarea>
                                 </div>
                                 
                                 <div>
@@ -239,7 +239,7 @@
                                         <option value="">Select</option>
                                         @for($i = 1; $i <= 5; $i++)
                                             <option value="{{ $i }}" 
-                                                {{ old("evaluation.child_evaluations.{$index}.rating", $existingEval->rating ?? '') == $i ? 'selected' : '' }}>
+                                                {{ old("evaluation.child_evaluations.{$index}.rating", $existingResponse->rating ?? '') == $i ? 'selected' : '' }}>
                                                 {{ $i }}
                                             </option>
                                         @endfor

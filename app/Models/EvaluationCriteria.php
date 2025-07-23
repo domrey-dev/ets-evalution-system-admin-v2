@@ -23,7 +23,7 @@ class EvaluationCriteria extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'evaluation_id',
+        'evaluations_id',
         'title_kh',
         'title_en',
         'description_kh',
@@ -51,7 +51,7 @@ class EvaluationCriteria extends Model
      */
     public function evaluation(): BelongsTo
     {
-        return $this->belongsTo(Evaluations::class, 'evaluation_id');
+        return $this->belongsTo(Evaluations::class, 'evaluations_id');
     }
 
     /**

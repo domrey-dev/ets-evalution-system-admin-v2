@@ -20,7 +20,7 @@ class EvaluationController extends Controller
      */
     public function index(Request $request)
     {
-        $evaluations = Evaluations::with(['createdBy', 'updatedBy', 'evaluationResult', 'criteria'])
+        $evaluations = Evaluations::with(['createdBy', 'updatedBy', 'evaluationSummaries', 'criteria'])
             //search
             ->when($request->input('search'), function ($query) use ($request) {
                 $query->where('title', 'like', '%' . $request->input('search') . '%');
@@ -60,12 +60,12 @@ class EvaluationController extends Controller
     public function show(string $id)
     {
         $evaluation = Evaluations::query()
-            ->with(['createdBy', 'updatedBy', 'evaluationResult', 'criteria' => function($query) {
+            ->with(['createdBy', 'updatedBy', 'evaluationSummaries', 'criteria' => function($query) {
                 $query->orderBy('order_number');
             }])
             ->findOrFail($id);
 
-        $total_responses = $evaluation->evaluationResult->count();
+        $total_responses = $evaluation->evaluationSummaries->count();
 
         return view('evaluations.show', [
             'evaluation' => $evaluation,
@@ -147,10 +147,14 @@ class EvaluationController extends Controller
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
         
+        // Map evaluation_id to evaluations_id for database consistency
+        $data['evaluations_id'] = $data['evaluation_id'];
+        unset($data['evaluation_id']);
+        
         EvaluationCriteria::create($data);
 
         return redirect()
-            ->route('evaluation.show', $data['evaluation_id'])
+            ->route('evaluation.show', $request->input('evaluation_id'))
             ->with('success', 'Evaluation criteria added successfully.');
     }
 
@@ -160,7 +164,7 @@ class EvaluationController extends Controller
     public function editCriteria($evaluationId, $criteriaId)
     {
         $evaluation = Evaluations::findOrFail($evaluationId);
-        $criteria = EvaluationCriteria::where('evaluation_id', $evaluationId)
+        $criteria = EvaluationCriteria::where('evaluations_id', $evaluationId)
                                     ->findOrFail($criteriaId);
         
         return view('evaluations.criteria.edit', [
@@ -174,11 +178,17 @@ class EvaluationController extends Controller
      */
     public function updateCriteria(EvaluationCriteriaRequest $request, $evaluationId, $criteriaId)
     {
-        $criteria = EvaluationCriteria::where('evaluation_id', $evaluationId)
+        $criteria = EvaluationCriteria::where('evaluations_id', $evaluationId)
                                     ->findOrFail($criteriaId);
         
         $data = $request->validated();
         $data['updated_by'] = Auth::id();
+        
+        // Map evaluation_id to evaluations_id for database consistency
+        if (isset($data['evaluation_id'])) {
+            $data['evaluations_id'] = $data['evaluation_id'];
+            unset($data['evaluation_id']);
+        }
         
         $criteria->update($data);
 
@@ -192,7 +202,7 @@ class EvaluationController extends Controller
      */
     public function deleteCriteria($evaluationId, $criteriaId)
     {
-        $criteria = EvaluationCriteria::where('evaluation_id', $evaluationId)
+        $criteria = EvaluationCriteria::where('evaluations_id', $evaluationId)
                                     ->findOrFail($criteriaId);
         
         $criteria->delete();
@@ -215,7 +225,7 @@ class EvaluationController extends Controller
 
         DB::transaction(function () use ($request, $evaluationId) {
             foreach ($request->criteria as $criteriaData) {
-                EvaluationCriteria::where('evaluation_id', $evaluationId)
+                EvaluationCriteria::where('evaluations_id', $evaluationId)
                                 ->where('id', $criteriaData['id'])
                                 ->update([
                                     'order_number' => $criteriaData['order_number'],

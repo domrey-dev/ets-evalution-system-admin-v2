@@ -151,7 +151,7 @@
         @endif
 
         <!-- Evaluation Criteria Results -->
-        @if($evaluation->childEvaluations && $evaluation->childEvaluations->count() > 0)
+        @if($evaluation->criteriaResponses && $evaluation->criteriaResponses->count() > 0)
         <div class="mt-8 bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl">
             <div class="px-6 py-4 border-b border-gray-200">
                 <div class="flex justify-between items-center">
@@ -171,10 +171,10 @@
                     $totalCriteria = 0;
                 @endphp
                 
-                @foreach($evaluation->childEvaluations as $childEvaluation)
+                @foreach($evaluation->criteriaResponses as $response)
                     @php
-                        if ($childEvaluation->rating) {
-                            $totalRatings += $childEvaluation->rating;
+                        if ($response->rating) {
+                            $totalRatings += $response->rating;
                             $totalCriteria++;
                         }
                     @endphp
@@ -183,29 +183,29 @@
                         <div class="flex justify-between items-start">
                             <div class="flex-1">
                                 <h4 class="font-medium text-gray-900">
-                                    @if($childEvaluation->evaluation)
-                                        {{ $childEvaluation->evaluation->title }}
+                                    @if($response->evaluationCriteria)
+                                        {{ $response->evaluationCriteria->title_en }} / {{ $response->evaluationCriteria->title_kh }}
                                     @else
-                                        Evaluation Criteria #{{ $childEvaluation->evaluation_id }}
+                                        Evaluation Criteria #{{ $response->evaluation_criteria_id }}
                                     @endif
                                 </h4>
                                 
-                                @if($childEvaluation->feedback)
+                                @if($response->feedback)
                                 <div class="mt-3">
                                     <p class="text-sm font-medium text-gray-700">យោបល់/Comments & feedback:</p>
                                     <div class="mt-1 p-3 bg-gray-50 rounded-md">
-                                        <p class="text-sm text-gray-900 whitespace-pre-wrap">{{ $childEvaluation->feedback }}</p>
+                                        <p class="text-sm text-gray-900 whitespace-pre-wrap">{{ $response->feedback }}</p>
                                     </div>
                                 </div>
                                 @endif
                             </div>
                             
                             <div class="ml-6 flex-shrink-0">
-                                @if($childEvaluation->rating)
+                                @if($response->rating)
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
-                                    {{ $childEvaluation->rating >= 4 ? 'bg-green-100 text-green-800' : 
-                                       ($childEvaluation->rating >= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                                    Rating: {{ $childEvaluation->rating }}/5
+                                    {{ $response->rating >= 4 ? 'bg-green-100 text-green-800' : 
+                                       ($response->rating >= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                    Rating: {{ $response->rating }}/5
                                 </span>
                                 @else
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">

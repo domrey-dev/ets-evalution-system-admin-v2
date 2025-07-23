@@ -116,7 +116,7 @@
                                 <!-- Staff Count -->
                                 <td class="px-4 py-4 text-center">
                                     <span class="text-sm font-semibold text-gray-900">
-                                        {{ $department->staff->count() ?? 0 }}
+                                        {{ $department->users_count }}
                                     </span>
                                 </td>
                                 
@@ -127,19 +127,19 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                         </svg>
                                         <span class="text-sm font-medium text-gray-900">
-                                            {{ rand(0, $department->staff->count() ?? 5) }}
+                                            {{ $department->completed_evaluations_count }}
                                         </span>
                                     </div>
                                 </td>
                                 
-                                <!-- Pending Evaluations -->
+                                <!-- Incomplete Evaluations -->
                                 <td class="px-4 py-4 text-center">
                                     <div class="flex items-center justify-center">
                                         <svg class="w-4 h-4 text-orange-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
                                         <span class="text-sm font-medium text-gray-900">
-                                            {{ rand(0, $department->staff->count() ?? 3) }}
+                                            {{ $department->incomplete_evaluations_count }}
                                         </span>
                                     </div>
                                 </td>

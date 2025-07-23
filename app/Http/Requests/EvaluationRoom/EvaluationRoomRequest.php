@@ -41,7 +41,7 @@ class EvaluationRoomRequest extends FormRequest
             // Section 3: Summary fields
             'summary' => 'required|array',
             'summary.improvement_points' => 'nullable|string',
-            'summary.total_score' => 'required|integer|min:0|max:50',
+            'summary.total_score' => 'required|integer|min:0|max:50', // Will be stored in monthly_performance
             'summary.grade' => 'required|in:A,B,C,D,E',
             'summary.evaluator_name' => 'required|string|max:255',
             'summary.evaluation_date' => 'required|date',
