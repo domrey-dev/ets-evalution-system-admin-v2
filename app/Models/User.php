@@ -54,6 +54,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'work_contract' => 'string',
             'gender' => 'string',
+            'department_id' => 'integer',
+            'position_id' => 'integer',
+            'project_id' => 'integer',
         ];
     }
 

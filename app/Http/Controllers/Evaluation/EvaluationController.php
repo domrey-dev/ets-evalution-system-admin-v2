@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Evaluation;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Evaluation\EvaluationRequest;
+use App\Http\Requests\Evaluation\EvaluationCriteriaRequest;
 use App\Http\Resources\Evaluation\EvaluationResource;
 use App\Models\Evaluations;
+use App\Models\EvaluationCriteria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class EvaluationController extends Controller
@@ -17,15 +20,16 @@ class EvaluationController extends Controller
      */
     public function index(Request $request)
     {
-        $evaluations = Evaluations::with(['createdBy', 'updatedBy', 'evaluationResult'])
+        $evaluations = Evaluations::with(['createdBy', 'updatedBy', 'evaluationResult', 'criteria'])
             //search
             ->when($request->input('search'), function ($query) use ($request) {
                 $query->where('title', 'like', '%' . $request->input('search') . '%');
             })
             ->orderBy('created_at', 'desc')
-            ->get();
-        return Inertia::render('Evaluation/Index', [
-            'evaluations' => EvaluationResource::collection($evaluations),
+            ->paginate(10);
+            
+        return view('evaluations.index', [
+            'evaluations' => $evaluations,
         ]);
     }
 
@@ -34,8 +38,7 @@ class EvaluationController extends Controller
      */
     public function create()
     {
-        //
-        return Inertia::render('Evaluation/Create');
+        return view('evaluations.create');
     }
 
     /**
@@ -48,7 +51,7 @@ class EvaluationController extends Controller
         $data['updated_by'] = Auth::id();
         Evaluations::create($data);
 
-        return redirect()->route('evaluations.index')->with('success', 'Task created.');
+        return redirect()->route('evaluation.index')->with('success', 'Evaluation template created successfully.');
     }
 
     /**
@@ -57,15 +60,15 @@ class EvaluationController extends Controller
     public function show(string $id)
     {
         $evaluation = Evaluations::query()
-            ->with(['createdBy', 'updatedBy', 'evaluationResult'])
+            ->with(['createdBy', 'updatedBy', 'evaluationResult', 'criteria' => function($query) {
+                $query->orderBy('order_number');
+            }])
             ->findOrFail($id);
 
         $total_responses = $evaluation->evaluationResult->count();
 
-        logger($total_responses);
-
-        return Inertia::render('Evaluation/Show', [
-            'evaluation' => new EvaluationResource($evaluation),
+        return view('evaluations.show', [
+            'evaluation' => $evaluation,
             'statistics' => [
                 'total_responses' => $total_responses,
             ],
@@ -78,11 +81,12 @@ class EvaluationController extends Controller
     public function edit($evaluation)
     {
         $evaluation = Evaluations::query()
-            ->with(['createdBy', 'updatedBy'])
+            ->with(['createdBy', 'updatedBy', 'criteria' => function($query) {
+                $query->orderBy('order_number');
+            }])
             ->findOrFail($evaluation);
 
-        $evaluation = new EvaluationResource($evaluation);
-        return Inertia::render('Evaluation/Edit', [
+        return view('evaluations.edit', [
             'evaluation' => $evaluation,
         ]);
     }
@@ -103,7 +107,7 @@ class EvaluationController extends Controller
 
         $evaluations->update($validated);
 
-        return redirect()->route('evaluations.index')->with('success', 'Task updated.');
+        return redirect()->route('evaluation.index')->with('success', 'Evaluation template updated successfully.');
     }
 
     /**
@@ -115,6 +119,111 @@ class EvaluationController extends Controller
 
         $evaluation->delete();
 
-        return redirect()->route('evaluations.index')->with('success', 'Evaluation deleted successfully.');
+        return redirect()->route('evaluation.index')->with('success', 'Evaluation deleted successfully.');
+    }
+
+    /**
+     * Add criteria to an evaluation
+     */
+    public function addCriteria($evaluationId)
+    {
+        $evaluation = Evaluations::findOrFail($evaluationId);
+        
+        // Get the next order number
+        $nextOrder = $evaluation->criteria()->max('order_number') + 1;
+        
+        return view('evaluations.criteria.create', [
+            'evaluation' => $evaluation,
+            'nextOrder' => $nextOrder,
+        ]);
+    }
+
+    /**
+     * Store a new criteria
+     */
+    public function storeCriteria(EvaluationCriteriaRequest $request)
+    {
+        $data = $request->validated();
+        $data['created_by'] = Auth::id();
+        $data['updated_by'] = Auth::id();
+        
+        EvaluationCriteria::create($data);
+
+        return redirect()
+            ->route('evaluation.show', $data['evaluation_id'])
+            ->with('success', 'Evaluation criteria added successfully.');
+    }
+
+    /**
+     * Show form to edit criteria
+     */
+    public function editCriteria($evaluationId, $criteriaId)
+    {
+        $evaluation = Evaluations::findOrFail($evaluationId);
+        $criteria = EvaluationCriteria::where('evaluation_id', $evaluationId)
+                                    ->findOrFail($criteriaId);
+        
+        return view('evaluations.criteria.edit', [
+            'evaluation' => $evaluation,
+            'criteria' => $criteria,
+        ]);
+    }
+
+    /**
+     * Update criteria
+     */
+    public function updateCriteria(EvaluationCriteriaRequest $request, $evaluationId, $criteriaId)
+    {
+        $criteria = EvaluationCriteria::where('evaluation_id', $evaluationId)
+                                    ->findOrFail($criteriaId);
+        
+        $data = $request->validated();
+        $data['updated_by'] = Auth::id();
+        
+        $criteria->update($data);
+
+        return redirect()
+            ->route('evaluation.show', $evaluationId)
+            ->with('success', 'Evaluation criteria updated successfully.');
+    }
+
+    /**
+     * Delete criteria
+     */
+    public function deleteCriteria($evaluationId, $criteriaId)
+    {
+        $criteria = EvaluationCriteria::where('evaluation_id', $evaluationId)
+                                    ->findOrFail($criteriaId);
+        
+        $criteria->delete();
+
+        return redirect()
+            ->route('evaluation.show', $evaluationId)
+            ->with('success', 'Evaluation criteria deleted successfully.');
+    }
+
+    /**
+     * Reorder criteria
+     */
+    public function reorderCriteria(Request $request, $evaluationId)
+    {
+        $request->validate([
+            'criteria' => 'required|array',
+            'criteria.*.id' => 'required|exists:evaluation_criteria,id',
+            'criteria.*.order_number' => 'required|integer|min:1',
+        ]);
+
+        DB::transaction(function () use ($request, $evaluationId) {
+            foreach ($request->criteria as $criteriaData) {
+                EvaluationCriteria::where('evaluation_id', $evaluationId)
+                                ->where('id', $criteriaData['id'])
+                                ->update([
+                                    'order_number' => $criteriaData['order_number'],
+                                    'updated_by' => Auth::id(),
+                                ]);
+            }
+        });
+
+        return response()->json(['success' => true]);
     }
 }

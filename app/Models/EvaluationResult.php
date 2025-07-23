@@ -25,6 +25,11 @@ class EvaluationResult extends Model
         'evaluation_type',
         'feedback',
         'rating',
+        'improvement_points',
+        'total_score',
+        'grade',
+        'evaluator_name',
+        'summary_date',
         'created_by',
         'updated_by'
     ];
@@ -36,6 +41,8 @@ class EvaluationResult extends Model
      */
     protected $casts = [
         'evaluation_date' => 'date',
+        'summary_date' => 'date',
+        'total_score' => 'integer',
     ];
 
     /**

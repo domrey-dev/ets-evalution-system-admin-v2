@@ -31,4 +31,14 @@ class Department extends Model
     {
         return $this->hasMany(EvaluationResult::class, 'department_id');
     }
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class, 'department_id');
+    }
+
+    public function staff(): HasMany
+    {
+        return $this->hasMany(User::class, 'department_id');
+    }
 }

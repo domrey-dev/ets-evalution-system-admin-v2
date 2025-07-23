@@ -7,20 +7,24 @@ use App\Http\Requests\Department\DepartmentRequest;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
+// use Inertia\Inertia; // Commented out since we're using Blade views
 
 class DepartmentController extends Controller
 {
 
     public function index()
     {
-        return Inertia::render('Department/Index', [
-            'departments' => Department::all(),
-        ]);
+        $departments = Department::with(['createdBy', 'updatedBy', 'staff'])
+            ->when(request('name'), function($query) {
+                $query->where('name', 'like', '%' . request('name') . '%');
+            })
+            ->paginate(10);
+        
+        return view('departments.index', compact('departments'));
     }
     public function create()
     {
-        return Inertia::render('Department/Create');
+        return view('departments.create');
     }
     public function store(DepartmentRequest $request)
     {
@@ -31,11 +35,16 @@ class DepartmentController extends Controller
 
         return redirect()->route('department.index')->with('success', 'Task created.');
     }
+
+    public function show(Department $department)
+    {
+        $department->load(['createdBy', 'updatedBy', 'staff.position', 'staff.department']);
+        
+        return view('departments.show', compact('department'));
+    }
     public function edit(Department $department)
     {
-        return Inertia::render('Department/Edit', [
-            'department' => $department,
-        ]);
+        return view('departments.edit', compact('department'));
     }
     public function update(Request $request, Department $department)
     {
