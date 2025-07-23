@@ -140,27 +140,6 @@
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
-                            {{-- Project Status --}}
-                            <div>
-                                <label for="project_due_date" class="text-sm font-medium text-gray-700">
-                                    End Work
-                                </label>
-                                <div class="mt-1 relative">
-                                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                    </div>
-                                    <input id="project_due_date"
-                                           type="date"
-                                           name="due_date"
-                                           value="{{ old('due_date') }}"
-                                           class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') @enderror" />
-                                </div>
-                                @error('due_date')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
                             <div>
                                 <label for="project_status" class="text-sm font-medium text-gray-700">
                                     Position

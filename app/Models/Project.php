@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Project extends Model
 {
@@ -26,7 +27,7 @@ class Project extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-    public function staffs(): BelongsTo
+    public function staff(): belongsTo
     {
         return $this->belongsTo(Staff::class, 'staff_id');
     }

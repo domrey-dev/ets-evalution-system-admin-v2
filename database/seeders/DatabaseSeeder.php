@@ -117,8 +117,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             PermissionSeeder::class,
-            StaffSeeder::class,
-            EvaluationSeeder::class,
         ]);
 
         $this->command->info("Created {$numberOfProjects} projects with {$tasksPerProject} tasks each.");

@@ -4,6 +4,7 @@ namespace App\Http\Resources\Staff;
 
 use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\Evaluation\EvaluationResource;
+use App\Http\Resources\Position\PositionResource;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\Role\RoleResource;
 use App\Http\Resources\UserResource;
@@ -35,11 +36,9 @@ class StaffResource extends JsonResource
             'status' => $this->status,
             'start_of_work' => $this->start_of_work ? Carbon::parse($this->start_of_work)->format('Y-m-d') : null,
             'end_of_work' => $this->end_of_work ? Carbon::parse($this->end_of_work)->format('Y-m-d') : null,
-            'position' => $this->position,
-//            'department' => new DepartmentResource($this->department),
-//            'project' => new ProjectResource($this->project),
-//            'role_id' => new RoleResource($this->role),
-//            'evaluations' => new EvaluationResource($this->evaluation),
+            'position' => new PositionResource($this->position),
+            'department' => new DepartmentResource($this->department),
+            'project' => new ProjectResource($this->project),
             'createdBy' => new UserResource($this->createdBy),
             'updatedBy' => new UserResource($this->updatedBy),
         ];
