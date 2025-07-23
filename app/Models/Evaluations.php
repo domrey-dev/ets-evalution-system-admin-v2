@@ -22,13 +22,37 @@ class Evaluations extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
     public function evaluationSelf(): HasMany
     {
         return $this->hasMany(EvaluationSelf::class);
     }
 
-    public function evaluationResult()
+
+
+    /**
+     * Get the criteria for this evaluation.
+     */
+    public function criteria(): HasMany
     {
-        return $this->hasMany(EvaluationResult::class, 'evaluation_id');
+        return $this->hasMany(EvaluationCriteria::class, 'evaluations_id');
+    }
+
+    /**
+     * Get the active criteria for this evaluation, ordered by order_number.
+     */
+    public function activeCriteria(): HasMany
+    {
+        return $this->hasMany(EvaluationCriteria::class, 'evaluations_id')
+                    ->where('is_active', true)
+                    ->orderBy('order_number');
+    }
+
+    /**
+     * Get evaluation summaries using this template.
+     */
+    public function evaluationSummaries(): HasMany
+    {
+        return $this->hasMany(EvaluationSummary::class, 'evaluations_id');
     }
 }

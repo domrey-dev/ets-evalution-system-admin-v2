@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // First create the admin user without foreign key constraints
         $admin = User::factory()->create([
             'id' => 1,
             'name' => 'ETS Admin',
@@ -23,46 +24,83 @@ class DatabaseSeeder extends Seeder
             'role' => ConstUserRole::ADMIN,
             'password' => bcrypt('password'),
             'email_verified_at' => now(),
-            'department_id' => 2, // Will need to exist after DepartmentSeeder runs
-            'position_id' => 1,   // Will be created below
-            'project_id' => 1,     // Will be created later
+            'department_id' => null,
+            'position_id' => null,
+            'project_id' => null,
         ]);
 
+        // Create positions first
+        Position::create(['name' => 'Manager', 'created_by' => $admin->id, 'updated_by' => $admin->id]);
+        Position::create(['name' => 'Developer', 'created_by' => $admin->id, 'updated_by' => $admin->id]);
+        Position::create(['name' => 'Designer', 'created_by' => $admin->id, 'updated_by' => $admin->id]);
+        Position::create(['name' => 'Tester', 'created_by' => $admin->id, 'updated_by' => $admin->id]);
+
+        // Now create other users with proper position references
         User::factory()->create([
             'id' => 2,
-            'name' => 'ETS Department',
+            'name' => 'ETS Department Manager',
             'email' => 'department@gmail.com',
             'role' => ConstUserRole::DEPARTMENT,
             'password' => bcrypt('password'),
             'email_verified_at' => now(),
-            'department_id' => 3, // Will need to exist after DepartmentSeeder runs
-            'position_id' => 1,   // Will be created below
-            'project_id' => 1,     // Will be created later
+            'department_id' => null,
+            'position_id' => 1,
+            'project_id' => null,
         ]);
 
         User::factory()->create([
             'id' => 3,
-            'name' => 'ETS User',
+            'name' => 'ETS Staff Member',
             'email' => 'user@gmail.com',
             'role' => ConstUserRole::USER,
             'password' => bcrypt('password'),
             'email_verified_at' => now(),
-            'department_id' => 1, // Will need to exist after DepartmentSeeder runs
-            'position_id' => 1,   // Will be created below
-            'project_id' => 1,     // Will be created later
+            'department_id' => null,
+            'position_id' => 2,
+            'project_id' => null,
         ]);
 
-        $positions = [
-            ['name' => 'Manager', 'created_by' => $admin->id, 'updated_by' => $admin->id],
-            ['name' => 'Developer', 'created_by' => $admin->id, 'updated_by' => $admin->id],
-            ['name' => 'Designer', 'created_by' => $admin->id, 'updated_by' => $admin->id],
-            ['name' => 'Tester', 'created_by' => $admin->id, 'updated_by' => $admin->id],
-        ];
+        User::factory()->create([
+            'id' => 4,
+            'name' => 'John Developer',
+            'email' => 'john@gmail.com',
+            'role' => ConstUserRole::USER,
+            'password' => bcrypt('password'),
+            'email_verified_at' => now(),
+            'department_id' => null,
+            'position_id' => 2,
+            'project_id' => null,
+        ]);
 
-        Position::insert($positions);
+        User::factory()->create([
+            'id' => 5,
+            'name' => 'Sarah Designer',
+            'email' => 'sarah@gmail.com',
+            'role' => ConstUserRole::USER,
+            'password' => bcrypt('password'),
+            'email_verified_at' => now(),
+            'department_id' => null,
+            'position_id' => 3,
+            'project_id' => null,
+        ]);
 
-        // Seed departments
+        // Update admin's position
+        $admin->update(['position_id' => 1]);
+
+        // Seed departments after users and positions are created
         $this->call(DepartmentSeeder::class);
+
+        // Assign users to departments after departments are created
+        $departments = \App\Models\Department::all();
+        if ($departments->count() > 0) {
+            // Assign first 3 users to first department
+            User::whereIn('id', [1, 2, 3])->update(['department_id' => $departments->first()->id]);
+            
+            // Assign remaining users to second department (if exists)
+            if ($departments->count() > 1) {
+                User::whereIn('id', [4, 5])->update(['department_id' => $departments->skip(1)->first()->id]);
+            }
+        }
 
         // Create projects with tasks
         $numberOfProjects = 15;

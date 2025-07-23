@@ -36,6 +36,11 @@
                     <x-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
                         {{ __('Evaluation') }}
                     </x-nav-link>
+
+                    <!-- Evaluation Room Link -->
+                    <x-nav-link :href="route('evaluation-room.index')" :active="request()->routeIs('evaluation-room.*')">
+                        {{ __('Evaluation Room') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -110,6 +115,11 @@
             <!-- Mobile Evaluation Link -->
             <x-responsive-nav-link :href="route('evaluation.index')" :active="request()->routeIs('evaluation.*')">
                 {{ __('Evaluation') }}
+            </x-responsive-nav-link>
+
+            <!-- Mobile Evaluation Room Link -->
+            <x-responsive-nav-link :href="route('evaluation-room.index')" :active="request()->routeIs('evaluation-room.*')">
+                {{ __('Evaluation Room') }}
             </x-responsive-nav-link>
         </div>
 
