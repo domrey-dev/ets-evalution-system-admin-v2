@@ -2,7 +2,7 @@ name: Laravel CI Pipeline
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
 jobs:
   setup:
     name: PHP Setup & Dependency Install
