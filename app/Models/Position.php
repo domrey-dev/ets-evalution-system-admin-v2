@@ -14,7 +14,7 @@ class Position extends Model
     protected $table = 'position';
     protected $primaryKey = 'id';
 
-    protected $fillable = ['name', 'description', 'created_by', 'updated_by'];
+    protected $fillable = ['name', 'description', 'created_by', 'updated_by','staff_id'];
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -23,8 +23,8 @@ class Position extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-    public function staff(): HasMany
+    public function staff(): belongsTo
     {
-        return $this->hasMany(Staff::class, 'staff_id');
+        return $this->belongsTo(Staff::class, 'staff_id');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Staff extends Model
@@ -13,24 +14,21 @@ class Staff extends Model
     protected $table = 'staffs';
     protected $primaryKey = 'id';
     protected $fillable = [
+        'staff_id',
         'en_name',
         'kh_name',
         'description',
         'gender',
         'phone',
         'email',
-        'address',
         'work_contract',
         'status',
         'start_of_work',
-        'end_of_work',
         'created_by',
         'updated_by',
-//        'department_id',
+        'department_id',
         'position_id',
-//        'project_id',
-//        'user_id',
-//        'role_id'
+        'project_id',
     ];
     public function createdBy(): BelongsTo
     {
@@ -40,18 +38,21 @@ class Staff extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-    public function department(): BelongsTo
+    public function department(): hasMany
     {
-        return $this->belongsTo(Department::class);
+        return $this->hasMany(Department::class, 'department_id');
     }
     public function position(): BelongsTo
     {
         return $this->belongsTo(Position::class);
     }
-    public function project(): HasMany
+    public function project(): BelongsTo
     {
-        return $this->hasMany(Project::class, 'id', 'project_id');
+        return $this->belongsTo(Project::class );
     }
+
+    // Old relationships removed - using new evaluation system
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

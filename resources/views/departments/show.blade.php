@@ -24,9 +24,9 @@
                 </svg>
                 Back to Departments
             </a>
-        </div>
+                </div>
     </div>
-@endsection
+@endsection 
 
 @section('content')
     <div class="py-8">
@@ -34,9 +34,7 @@
             {{-- Performance Metrics Cards --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 @php
-                    $staffCount = rand(15, 68);
-                    $completedEvaluations = rand(12, 52);
-                    $pendingEvaluations = rand(3, 16);
+                    $staffCount = $department->users()->count();
                 @endphp
                 
                 <!-- Staff Count Card -->
@@ -89,7 +87,7 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Incomplete Evaluations</dt>
-                                    <dd class="text-lg font-medium text-gray-900">{{ $pendingEvaluations }}</dd>
+                                    <dd class="text-lg font-medium text-gray-900">{{ $incompleteEvaluations }}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -188,88 +186,92 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @php
-                                    // Generate sample staff data
-                                    $staffNames = [
-                                        'John Smith', 'Sarah Johnson', 'Michael Brown', 'Emily Davis', 
-                                        'David Wilson', 'Lisa Anderson', 'Robert Taylor', 'Jessica Martinez',
-                                        'James Thompson', 'Ashley Garcia', 'Christopher Lee', 'Amanda Rodriguez'
-                                    ];
-                                    
-                                    $evaluationStatuses = [
-                                        ['status' => 'completed', 'label' => 'Completed', 'color' => 'text-green-600'],
-                                        ['status' => 'incomplete', 'label' => 'Incomplete', 'color' => 'text-gray-500']
-                                    ];
-                                @endphp
+                                                        @forelse($department->users as $staff)
+                            @php
+                                // Check actual evaluation statuses from database
+                                $selfEvaluation = $staff->evaluationSummaries->where('evaluation_type', 'self')->first();
+                                $staffEvaluation = $staff->evaluationSummaries->where('evaluation_type', 'staff')->first();
+                                $finalEvaluation = $staff->evaluationSummaries->where('evaluation_type', 'final')->first();
                                 
-                                @for($i = 1; $i <= 10; $i++)
-                                    @php
-                                        $staff = $staffNames[array_rand($staffNames)];
-                                        $selfEval = $evaluationStatuses[array_rand($evaluationStatuses)];
-                                        $staffEval = $evaluationStatuses[array_rand($evaluationStatuses)];
-                                        $finalEval = $evaluationStatuses[array_rand($evaluationStatuses)];
-                                        $staffId = str_pad($i, 3, '0', STR_PAD_LEFT);
-                                    @endphp
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            {{ $staffId }}
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            {{ $staff }}
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap text-center">
-                                            <div class="flex items-center justify-center">
-                                                @if($selfEval['status'] == 'completed')
-                                                    <svg class="w-4 h-4 text-green-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                    </svg>
-                                                @else
-                                                    <svg class="w-4 h-4 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                                                    </svg>
-                                                @endif
-                                                <span class="text-sm {{ $selfEval['color'] }}">{{ $selfEval['label'] }}</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap text-center">
-                                            <div class="flex items-center justify-center">
-                                                @if($staffEval['status'] == 'completed')
-                                                    <svg class="w-4 h-4 text-green-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                    </svg>
-                                                @else
-                                                    <svg class="w-4 h-4 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                                                    </svg>
-                                                @endif
-                                                <span class="text-sm {{ $staffEval['color'] }}">{{ $staffEval['label'] }}</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap text-center">
-                                            <div class="flex items-center justify-center">
-                                                @if($finalEval['status'] == 'completed')
-                                                    <svg class="w-4 h-4 text-green-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                    </svg>
-                                                @else
-                                                    <svg class="w-4 h-4 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                                                    </svg>
-                                                @endif
-                                                <span class="text-sm {{ $finalEval['color'] }}">{{ $finalEval['label'] }}</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap text-center">
-                                            <a href="{{ route('evaluation.index', ['staff_id' => $staffId]) }}"
-                                               class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
-                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                                                </svg>
-                                                Evaluate
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endfor
+                                $selfEvalStatus = $selfEvaluation ? 'completed' : 'incomplete';
+                                $staffEvalStatus = $staffEvaluation ? 'completed' : 'incomplete';
+                                $finalEvalStatus = $finalEvaluation ? 'completed' : 'incomplete';
+                            @endphp
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ $staff->id }}
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    {{ $staff->name }}
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap text-center">
+                                    <div class="flex items-center justify-center">
+                                        @if($selfEvalStatus == 'completed')
+                                            <svg class="w-4 h-4 text-green-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            <span class="text-sm text-green-600">Completed</span>
+                                        @else
+                                            <svg class="w-4 h-4 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                            </svg>
+                                            <span class="text-sm text-gray-500">Incomplete</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap text-center">
+                                    <div class="flex items-center justify-center">
+                                        @if($staffEvalStatus == 'completed')
+                                            <svg class="w-4 h-4 text-green-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            <span class="text-sm text-green-600">Completed</span>
+                                        @else
+                                            <svg class="w-4 h-4 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                            </svg>
+                                            <span class="text-sm text-gray-500">Incomplete</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap text-center">
+                                    <div class="flex items-center justify-center">
+                                        @if($finalEvalStatus == 'completed')
+                                            <svg class="w-4 h-4 text-green-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            <span class="text-sm text-green-600">Completed</span>
+                                        @else
+                                            <svg class="w-4 h-4 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                            </svg>
+                                            <span class="text-sm text-gray-500">Incomplete</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap text-center">
+                                    <a href="{{ route('evaluation-room.index', ['employeeId' => $staff->id]) }}"
+                                       class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors duration-200">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                                        </svg>
+                                        Evaluate
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-4 py-8 text-center text-gray-500">
+                                    <div class="flex flex-col items-center">
+                                        <svg class="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                        </svg>
+                                        <p class="text-sm font-medium">No staff assigned to this department</p>
+                                        <p class="text-xs text-gray-400">Add staff members to see evaluation options</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
                             </tbody>
                         </table>
                     </div>

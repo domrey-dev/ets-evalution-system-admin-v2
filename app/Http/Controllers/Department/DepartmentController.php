@@ -5,22 +5,40 @@ namespace App\Http\Controllers\Department;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Department\DepartmentRequest;
 use App\Models\Department;
+use App\Models\EvaluationSummary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
+// use Inertia\Inertia; // Commented out since we're using Blade views
 
 class DepartmentController extends Controller
 {
 
     public function index()
     {
-        return Inertia::render('Department/Index', [
-            'departments' => Department::all(),
-        ]);
+        $departments = Department::with(['createdBy', 'updatedBy', 'users'])
+            ->withCount([
+                'users',
+                'users as completed_evaluations_count' => function($query) {
+                    $query->whereHas('evaluationSummaries', function($subQuery) {
+                        $subQuery->where('evaluation_type', 'final');
+                    });
+                },
+                'users as incomplete_evaluations_count' => function($query) {
+                    $query->whereDoesntHave('evaluationSummaries', function($subQuery) {
+                        $subQuery->where('evaluation_type', 'final');
+                    });
+                }
+            ])
+            ->when(request('name'), function($query) {
+                $query->where('name', 'like', '%' . request('name') . '%');
+            })
+            ->paginate(10);
+        
+        return view('departments.index', compact('departments'));
     }
     public function create()
     {
-        return Inertia::render('Department/Create');
+        return view('departments.create');
     }
     public function store(DepartmentRequest $request)
     {
@@ -31,11 +49,32 @@ class DepartmentController extends Controller
 
         return redirect()->route('department.index')->with('success', 'Task created.');
     }
+
+    public function show(Department $department)
+    {
+        $department->load([
+            'createdBy', 
+            'updatedBy', 
+            'users.position', 
+            'users.department',
+            'users.evaluationSummaries' => function($query) {
+                $query->whereIn('evaluation_type', ['self', 'staff', 'final']);
+            }
+        ]);
+
+        // Calculate evaluation counts
+        $staffCount = $department->users()->count();
+        $completedEvaluations = $department->users()
+            ->whereHas('evaluationSummaries', function($query) {
+                $query->where('evaluation_type', 'final');
+            })->count();
+        $incompleteEvaluations = $staffCount - $completedEvaluations;
+        
+        return view('departments.show', compact('department', 'completedEvaluations', 'incompleteEvaluations'));
+    }
     public function edit(Department $department)
     {
-        return Inertia::render('Department/Edit', [
-            'department' => $department,
-        ]);
+        return view('departments.edit', compact('department'));
     }
     public function update(Request $request, Department $department)
     {
