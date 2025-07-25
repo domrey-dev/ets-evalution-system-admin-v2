@@ -2,9 +2,7 @@ version: "3.8"
 
 services:
     app:
-        build:
-            context: .
-            dockerfile: Dockerfile
+        image: reaksa7236/ets-evaluat-v2:master
         container_name: laravel11-app
         environment:
             APP_NAME: Laravel
