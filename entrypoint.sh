@@ -22,6 +22,7 @@ fi
 # else
 #     echo "Application key already exists."
 # fi
+pwd
 cat .env
 
 php artisan key:generate
