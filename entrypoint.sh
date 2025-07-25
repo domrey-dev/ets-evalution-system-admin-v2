@@ -11,9 +11,9 @@ else
     echo "vendor directory already exists. Skipping composer install."
 fi
 
-if [ ! -f .env ]; then
-    cp .env.example .env
-fi
+# if [ ! -f .env ]; then
+#     cp .env.example .env
+# fi
 
 # If not, generate it. This is crucial for Laravel's security features.
 # if grep -qE '^APP_KEY=\s*$' .env || ! grep -q '^APP_KEY=' .env; then
@@ -22,25 +22,26 @@ fi
 # else
 #     echo "Application key already exists."
 # fi
-cat .env
+pwd
 
-php artisan key:generate
+ls
 
-cat .env
+npm install
+npm run build
 
-if [ ! -d "node_modules" ]; then
-    echo "Running npm install..."
-    npm install
-else
-    echo "Skipping npm install."
-fi
+# if [ ! -d "node_modules" ]; then
+#     echo "Running npm install..."
+#     npm install
+# else
+#     echo "Skipping npm install."
+# fi
 
-if [ -d "node_modules" ]; then
-    echo "Running npm run build..."
-    npm run build
-else
-    echo "node_modules not found, skipping npm run build."
-fi
+# if [ -d "node_modules" ]; then
+#     echo "Running npm run build..."
+#     npm run build
+# else
+#     echo "node_modules not found, skipping npm run build."
+# fi
 
 # Run Laravel migrations.
 # echo "Running Laravel migrations..."

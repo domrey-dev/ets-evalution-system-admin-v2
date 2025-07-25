@@ -5,6 +5,7 @@ services:
         image: reaksa7236/ets-evaluat-v2:master
         container_name: laravel11-app
         environment:
+            PORT: 8001
             APP_NAME: Laravel
             APP_ENV: local
             APP_KEY: base64:nKy3bfQf/STDcTlOExN2BnIqXr9k3VHgV0jTKB3Wna4=
@@ -30,8 +31,8 @@ services:
             DB_CONNECTION: pgsql
             DB_HOST: postgres_db
             DB_PORT: 5432
-            DB_DATABASE: T02
-            DB_USERNAME: ets
+            DB_DATABASE: rtfdg
+            DB_USERNAME: etsfftgr
             DB_PASSWORD: 2tZxHFizMpxll5
 
             BROADCAST_CONNECTION: log
