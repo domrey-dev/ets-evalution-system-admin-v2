@@ -1,18 +1,26 @@
-version: "3.8"
+version: '3.8'
+
 services:
-    mysql:
-        image: mysql:latest
-        container_name: mysql_db
-        restart: unless-stopped
-        ports:
-            - "3306:3306"
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: laravel_db
-            MYSQL_USER: laravel_user
-            MYSQL_PASSWORD: 2tZxHFizMpx
-        networks:
-            - ets_network
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: pguser_dev
+      POSTGRES_PASSWORD: 2tZxHFizMpxll5
+      POSTGRES_DB: pgdatabase
+      
+    networks:
+        - ets_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+
 networks:
     ets_network:
         external: true
