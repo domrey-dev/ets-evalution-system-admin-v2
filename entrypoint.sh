@@ -27,21 +27,23 @@ cat .env
 
 php artisan key:generate
 
-cat .env
+ls
+npm install
+npm run build
 
-if [ ! -d "node_modules" ]; then
-    echo "Running npm install..."
-    npm install
-else
-    echo "Skipping npm install."
-fi
+# if [ ! -d "node_modules" ]; then
+#     echo "Running npm install..."
+#     npm install
+# else
+#     echo "Skipping npm install."
+# fi
 
-if [ -d "node_modules" ]; then
-    echo "Running npm run build..."
-    npm run build
-else
-    echo "node_modules not found, skipping npm run build."
-fi
+# if [ -d "node_modules" ]; then
+#     echo "Running npm run build..."
+#     npm run build
+# else
+#     echo "node_modules not found, skipping npm run build."
+# fi
 
 # Run Laravel migrations.
 # echo "Running Laravel migrations..."
