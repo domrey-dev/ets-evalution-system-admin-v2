@@ -11,9 +11,9 @@ else
     echo "vendor directory already exists. Skipping composer install."
 fi
 
-if [ ! -f .env ]; then
-    cp .env.example .env
-fi
+# if [ ! -f .env ]; then
+#     cp .env.example .env
+# fi
 
 # If not, generate it. This is crucial for Laravel's security features.
 # if grep -qE '^APP_KEY=\s*$' .env || ! grep -q '^APP_KEY=' .env; then
