@@ -23,11 +23,9 @@ fi
 #     echo "Application key already exists."
 # fi
 pwd
-cat .env
-
-php artisan key:generate
 
 ls
+
 npm install
 npm run build
 
