@@ -14,14 +14,14 @@ class Staff extends Model
     protected $table = 'staffs';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'staff_id',
+        'staff_code',
         'en_name',
         'kh_name',
         'description',
-        'gender',
-        'phone',
         'email',
+        'phone',
         'work_contract',
+        'gender',
         'status',
         'start_of_work',
         'created_by',
@@ -38,9 +38,9 @@ class Staff extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-    public function department(): hasMany
+    public function department(): BelongsTo
     {
-        return $this->hasMany(Department::class, 'department_id');
+        return $this->belongsTo(Department::class, 'department_id');
     }
     public function position(): BelongsTo
     {
