@@ -36,202 +36,240 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {{-- Project Name --}}
-                            <div class="md:col-span-2">
-                                <label for="project_name" class="text-sm font-medium text-gray-700">
-                                    Staff ID
+                            {{-- Staff Code --}}
+                            <div>
+                                <label for="staff_code" class="text-sm font-medium text-gray-700">
+                                    Staff Code <span class="text-red-500">*</span>
                                 </label>
                                 <div class="mt-1 relative">
-                                    <input id="project_name"
+                                    <input id="staff_code"
                                            type="text"
-                                           name="name"
-                                           value="{{ old('name') }}"
-                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('name') @enderror"
-                                           placeholder="Enter Staff ID"
+                                           name="staff_code"
+                                           value="{{ old('staff_code') }}"
+                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('staff_code') border-red-300 @enderror"
+                                           placeholder="Enter Staff Code"
                                            required
                                            autofocus />
                                 </div>
-                                @error('name')
+                                @error('staff_code')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            {{-- Due Date --}}
+                            {{-- English Name --}}
                             <div>
-                                <label for="project_due_date" class="text-sm font-medium text-gray-700">
-                                    En Name
+                                <label for="en_name" class="text-sm font-medium text-gray-700">
+                                    English Name <span class="text-red-500">*</span>
                                 </label>
                                 <div class="mt-1 relative">
-                                    <input id="project_due_date"
+                                    <input id="en_name"
                                            type="text"
-                                           name="due_date"
-                                           value="{{ old('due_date') }}"
-                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') @enderror" />
+                                           name="en_name"
+                                           value="{{ old('en_name') }}"
+                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('en_name') border-red-300 @enderror"
+                                           placeholder="Enter English Name"
+                                           required />
                                 </div>
-                                @error('due_date')
+                                @error('en_name')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            {{-- Khmer Name --}}
                             <div>
-                                <label for="project_due_date" class="text-sm font-medium text-gray-700">
-                                    Kh Name
+                                <label for="kh_name" class="text-sm font-medium text-gray-700">
+                                    Khmer Name <span class="text-red-500">*</span>
                                 </label>
                                 <div class="mt-1 relative">
-                                    <input id="project_due_date"
+                                    <input id="kh_name"
                                            type="text"
-                                           name="due_date"
-                                           value="{{ old('due_date') }}"
-                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') @enderror" />
+                                           name="kh_name"
+                                           value="{{ old('kh_name') }}"
+                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('kh_name') border-red-300 @enderror"
+                                           placeholder="Enter Khmer Name"
+                                           required />
                                 </div>
-                                @error('due_date')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @error('kh_name')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            {{-- Email --}}
                             <div>
-                                <label for="project_due_date" class="text-sm font-medium text-gray-700">
+                                <label for="email" class="text-sm font-medium text-gray-700">
+                                    Email <span class="text-red-500">*</span>
+                                </label>
+                                <div class="mt-1 relative">
+                                    <input id="email"
+                                           type="email"
+                                           name="email"
+                                           value="{{ old('email') }}"
+                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('email') border-red-300 @enderror"
+                                           placeholder="Enter Email Address"
+                                           required />
+                                </div>
+                                @error('email')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Phone --}}
+                            <div>
+                                <label for="phone" class="text-sm font-medium text-gray-700">
                                     Phone Number
                                 </label>
                                 <div class="mt-1 relative">
-                                    <input id="project_due_date"
+                                    <input id="phone"
                                            type="text"
-                                           name="due_date"
-                                           value="{{ old('due_date') }}"
-                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') @enderror" />
+                                           name="phone"
+                                           value="{{ old('phone') }}"
+                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('phone') border-red-300 @enderror"
+                                           placeholder="Enter Phone Number" />
                                 </div>
-                                @error('due_date')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @error('phone')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            {{-- Gender --}}
                             <div>
-                                <label for="project_status" class="text-sm font-medium text-gray-700">
-                                    Gender
+                                <label for="gender" class="text-sm font-medium text-gray-700">
+                                    Gender <span class="text-red-500">*</span>
                                 </label>
                                 <div class="mt-1">
-                                    <select name="status"
-                                            id="project_status"
-                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') @enderror"
+                                    <select id="gender"
+                                            name="gender"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('gender') border-red-300 @enderror"
                                             required>
-                                        <option value="">Select Status</option>
-                                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Male</option>
-                                        <option value="in_progress" {{ old('status') == 'in_progress' ? 'selected' : '' }}>Female</option>
+                                        <option value="">Select Gender</option>
+                                        <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
+                                        <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
                                     </select>
                                 </div>
-                                @error('status')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @error('gender')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            {{-- Work Contract --}}
                             <div>
-                                <label for="project_due_date" class="text-sm font-medium text-gray-700">
-                                    Start Work
+                                <label for="work_contract" class="text-sm font-medium text-gray-700">
+                                    Work Contract <span class="text-red-500">*</span>
+                                </label>
+                                <div class="mt-1">
+                                    <select id="work_contract"
+                                            name="work_contract"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('work_contract') border-red-300 @enderror"
+                                            required>
+                                        <option value="">Select Contract Type</option>
+                                        <option value="Permanent" {{ old('work_contract') == 'Permanent' ? 'selected' : '' }}>Permanent</option>
+                                        <option value="Project-based" {{ old('work_contract') == 'Project-based' ? 'selected' : '' }}>Project-based</option>
+                                        <option value="Internship" {{ old('work_contract') == 'Internship' ? 'selected' : '' }}>Internship</option>
+                                        <option value="Subcontract" {{ old('work_contract') == 'Subcontract' ? 'selected' : '' }}>Subcontract</option>
+                                    </select>
+                                </div>
+                                @error('work_contract')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Start of Work --}}
+                            <div>
+                                <label for="start_of_work" class="text-sm font-medium text-gray-700">
+                                    Start of Work <span class="text-red-500">*</span>
                                 </label>
                                 <div class="mt-1 relative">
-                                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                    </div>
-                                    <input id="project_due_date"
+                                    <input id="start_of_work"
                                            type="date"
-                                           name="due_date"
-                                           value="{{ old('due_date') }}"
-                                           class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('due_date') @enderror" />
+                                           name="start_of_work"
+                                           value="{{ old('start_of_work') }}"
+                                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('start_of_work') border-red-300 @enderror"
+                                           required />
                                 </div>
-                                @error('due_date')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @error('start_of_work')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            {{-- Department --}}
                             <div>
-                                <label for="project_status" class="text-sm font-medium text-gray-700">
-                                    Position
+                                <label for="department_id" class="text-sm font-medium text-gray-700">
+                                    Department <span class="text-red-500">*</span>
                                 </label>
                                 <div class="mt-1">
-                                    <select name="status"
-                                            id="project_status"
-                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') @enderror"
+                                    <select id="department_id"
+                                            name="department_id"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('department_id') border-red-300 @enderror"
                                             required>
-                                        <option value="">Select Status</option>
-                                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Heard HR</option>
-                                        <option value="in_progress" {{ old('status') == 'in_progress' ? 'selected' : '' }}>Site Engineer</option>
-                                        <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Design Engineer</option>
+                                        <option value="">Select Department</option>
+                                        @foreach($departments as $department)
+                                            <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                                                {{ $department->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
-                                @error('status')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @error('department_id')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            {{-- Position --}}
                             <div>
-                                <label for="project_status" class="text-sm font-medium text-gray-700">
-                                    Work Contract
+                                <label for="position_id" class="text-sm font-medium text-gray-700">
+                                    Position <span class="text-red-500">*</span>
                                 </label>
                                 <div class="mt-1">
-                                    <select name="status"
-                                            id="project_status"
-                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') @enderror"
+                                    <select id="position_id"
+                                            name="position_id"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('position_id') border-red-300 @enderror"
                                             required>
-                                        <option value="">Select Status</option>
-                                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Full Time</option>
-                                        <option value="in_progress" {{ old('status') == 'in_progress' ? 'selected' : '' }}>Part Time</option>
-                                        <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Remote</option>
+                                        <option value="">Select Position</option>
+                                        @foreach($positions as $position)
+                                            <option value="{{ $position->id }}" {{ old('position_id') == $position->id ? 'selected' : '' }}>
+                                                {{ $position->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
-                                @error('status')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @error('position_id')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            {{-- Project --}}
                             <div>
-                                <label for="project_status" class="text-sm font-medium text-gray-700">
-                                    Department
-                                </label>
-                                <div class="mt-1">
-                                    <select name="status"
-                                            id="project_status"
-                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') @enderror"
-                                            required>
-                                        <option value="">Select Status</option>
-                                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Engineer</option>
-                                        <option value="in_progress" {{ old('status') == 'in_progress' ? 'selected' : '' }}>IT</option>
-                                        <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Operation</option>
-                                    </select>
-                                </div>
-                                @error('status')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div>
-                                <label for="project_status" class="text-sm font-medium text-gray-700">
+                                <label for="project_id" class="text-sm font-medium text-gray-700">
                                     Project
                                 </label>
                                 <div class="mt-1">
-                                    <select name="status"
-                                            id="project_status"
-                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('status') @enderror"
-                                            required>
-                                        <option value="">Select Status</option>
-                                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Engineer</option>
-                                        <option value="in_progress" {{ old('status') == 'in_progress' ? 'selected' : '' }}>IT</option>
-                                        <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Operation</option>
+                                    <select id="project_id"
+                                            name="project_id"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('project_id') border-red-300 @enderror">
+                                        <option value="">Select Project</option>
+                                        @foreach($projects as $project)
+                                            <option value="{{ $project->id }}" {{ old('project_id') == $project->id ? 'selected' : '' }}>
+                                                {{ $project->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
-                                @error('status')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @error('project_id')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
-                            {{-- Project Description --}}
+
+                            {{-- Description --}}
                             <div class="md:col-span-2">
-                                <label for="project_description" class="text-sm font-medium text-gray-700">
-                                    Project Description
+                                <label for="description" class="text-sm font-medium text-gray-700">
+                                    Description
                                 </label>
-                                <div class="mt-1 relative">
-                                    <div class="absolute left-3 top-3 text-gray-400">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
-                                    </div>
-                                    <textarea id="project_description"
+                                <div class="mt-1">
+                                    <textarea id="description"
                                               name="description"
                                               rows="4"
-                                              class="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('description') @enderror"
-                                              placeholder="Describe your project goals, requirements, and key details...">{{ old('description') }}</textarea>
+                                              class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 @error('description') border-red-300 @enderror"
+                                              placeholder="Enter staff description (optional)">{{ old('description') }}</textarea>
                                 </div>
                                 @error('description')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
