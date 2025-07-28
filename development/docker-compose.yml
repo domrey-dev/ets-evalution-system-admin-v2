@@ -2,14 +2,14 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:15
     container_name: postgres_db
     restart: always
     environment:
       POSTGRES_USER: pguser_dev
       POSTGRES_PASSWORD: 2tZxHFizMpxll5
       POSTGRES_DB: pgdatabase
-      
+
     networks:
         - ets_network
     volumes:
