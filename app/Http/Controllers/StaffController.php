@@ -18,7 +18,7 @@ class StaffController extends Controller
     public function index(Request $request)
     {
 
-        $query = Staff::with('createdBy', 'projects', 'position', 'department'); // Load the relationship
+        $query = Staff::with('createdBy', 'project', 'position', 'department'); // Load the relationship
 
         $sortField = $request->get("sort_field", 'created_at');
         $sortDirection = $request->get("sort_direction", "desc");
@@ -47,8 +47,16 @@ class StaffController extends Controller
      */
     public function create()
     {
-        //
-        return view('staff.create', ['title' => 'Staff']);
+        $departments = Department::all();
+        $positions = Position::all();
+        $projects = Project::all();
+        
+        return view('staff.create', [
+            'title' => 'Create Staff',
+            'departments' => $departments,
+            'positions' => $positions,
+            'projects' => $projects,
+        ]);
     }
 
     /**
@@ -59,13 +67,13 @@ class StaffController extends Controller
         $data = $request->validated();
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
-        $data['status'] = 1;
-        $data['department_id'] = Department::query()->first()->id;
-        $data['position_id'] = Position::query()->first()->id;
-        $data['project_id'] = Project::query()->first()->id;
-        $data['start_date'] = date('Y-m-d');
+        $data['status'] = 'Active';
+        // Remove hardcoded assignments - these should come from form or be required
+        // $data['department_id'] = Department::query()->first()->id;
+        // $data['position_id'] = Position::query()->first()->id;
+        // $data['project_id'] = Project::query()->first()->id;
         Staff::create($data);
-        return redirect()->route('staff.index')->with('success', 'Task created.');
+        return redirect()->route('staff.index')->with('success', 'Staff created successfully.');
     }
 
     /**
@@ -88,9 +96,20 @@ class StaffController extends Controller
     {
         //
         $staff = Staff::query()
-            ->with(['createdBy', 'project', 'position'])
+            ->with(['createdBy', 'project', 'position', 'department'])
             ->findOrFail($id);
-        return view('staff.edit', ['staff' => $staff, 'title' => 'Staff']);
+            
+        $departments = Department::all();
+        $positions = Position::all();
+        $projects = Project::all();
+        
+        return view('staff.edit', [
+            'staff' => $staff, 
+            'title' => 'Edit Staff',
+            'departments' => $departments,
+            'positions' => $positions,
+            'projects' => $projects,
+        ]);
     }
 
     /**
@@ -98,15 +117,24 @@ class StaffController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
         $validated = $request->validate([
-            'en_name' => 'required|string|max:255'
+            'staff_code' => 'required|string|unique:staffs,staff_code,' . $id,
+            'en_name' => 'required|string|max:255',
+            'kh_name' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:staffs,email,' . $id,
+            'phone' => 'nullable|string|max:20',
+            'gender' => 'required|in:Male,Female',
+            'work_contract' => 'required|in:Permanent,Project-based,Internship,Subcontract',
+            'start_of_work' => 'required|date',
+            'department_id' => 'required|exists:department,id',
+            'position_id' => 'required|exists:position,id',
+            'project_id' => 'nullable|exists:projects,id',
         ]);
-        $staff = Staff::query()
-            ->with(['createdBy', 'project', 'position'])
-            ->findOrFail($id);
+        
+        $staff = Staff::findOrFail($id);
         $staff->update($validated);
-        return redirect()->route('staff.index')->with('success', 'Task updated.');
+        
+        return redirect()->route('staff.index')->with('success', 'Staff updated successfully.');
     }
 
     /**
@@ -119,6 +147,6 @@ class StaffController extends Controller
             ->with(['createdBy', 'project', 'position'])
             ->findOrFail($id);
         $staff->delete();
-        return redirect()->route('staff.index')->with('success', 'Task deleted.');
+        return redirect()->route('staff.index')->with('success', 'Staff deleted successfully.');
     }
 }

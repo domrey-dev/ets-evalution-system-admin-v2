@@ -139,7 +139,7 @@
                         @forelse($staff as $staffs)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
-                                    {{ $staffs->staff_id }}
+                                    {{ $staffs->staff_code }}
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4">
                                     <div class="text-xs sm:text-sm font-medium text-gray-900 truncate">
@@ -156,27 +156,19 @@
                                         {{ $staffs->work_contract}}
                                     </div>
                                 </td>
-                                </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4">
                                     <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
                                         {{ $staffs->gender}}
                                     </div>
                                 </td>
-                                </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4">
                                     <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
-                                        {{ $staffs->position}}
-                                    </div>
-                                </td>
-                                </td>
-                                <td class="px-2 sm:px-4 py-3 sm:py-4">
-                                    <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
-                                        {{ $staffs->department}}
+                                        {{ $staffs->position ? $staffs->position->name : 'N/A' }}
                                     </div>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4">
                                     <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
-                                        {{ $staffs->projects}}
+                                        {{ $staffs->department ? $staffs->department->name : 'N/A' }}
                                     </div>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap">
@@ -211,7 +203,12 @@
                                     </span>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                                    {{ $staffs->due_date ? Carbon::parse($staffs->due_date)->format('M d, Y') : '-' }}
+                                    {{ $staffs->start_of_work ? Carbon::parse($staffs->start_of_work)->format('M d, Y') : '-' }}
+                                </td>
+                                <td class="px-2 sm:px-4 py-3 sm:py-4">
+                                    <div class="text-xs sm:text-sm text-gray-900 max-w-xs truncate">
+                                        {{ $staffs->project ? $staffs->project->name : 'N/A' }}
+                                    </div>
                                 </td>
                                 <td class="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                                     {{ $staffs->createdBy->name ?? '-' }}
@@ -260,18 +257,18 @@
                         @empty
                             {{-- Empty State Row --}}
                             <tr>
-                                <td colspan="7" class="px-6 py-12 text-center">
+                                <td colspan="12" class="px-6 py-12 text-center">
                                     <div
                                         class="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                                         <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor"
                                              viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                  d="M12 4v16m8-8H4"></path>
+                                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                         </svg>
                                     </div>
-                                    <h3 class="text-lg font-medium text-gray-900 mb-2">No projects found</h3>
+                                    <h3 class="text-lg font-medium text-gray-900 mb-2">No staff found</h3>
                                     <p class="text-gray-500 mb-6">
-                                        Get started by creating your first project.
+                                        Get started by adding your first staff member.
                                     </p>
                                     <a href="{{ route('staff.create') }}"
                                        class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-all">
@@ -279,7 +276,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                   d="M12 4v16m8-8H4"></path>
                                         </svg>
-                                        Create Project
+                                        Create Staff
                                     </a>
                                 </td>
                             </tr>

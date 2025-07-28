@@ -11,7 +11,7 @@ class StaffRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,13 +22,18 @@ class StaffRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'staff_id' => ['required|exists:staff,id'],
-            'en_name' => ['required|string'],
-            'kh_name' => ['required|string'],
-            'gender' => ['required|in:male,female'],
-            'work_contract' => ['required|in:full_time,part_time,contract'],
-            'start_date' => ['required|date'],
-            'status' => ['required|in:active,inactive'],
+            'staff_code' => ['required', 'string', 'unique:staffs,staff_code'],
+            'en_name' => ['required', 'string', 'max:255'],
+            'kh_name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'email' => ['required', 'email', 'unique:staffs,email'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'gender' => ['required', 'in:Male,Female'],
+            'work_contract' => ['required', 'in:Permanent,Project-based,Internship,Subcontract'],
+            'start_of_work' => ['required', 'date'],
+            'department_id' => ['required', 'exists:department,id'],
+            'position_id' => ['required', 'exists:position,id'],
+            'project_id' => ['nullable', 'exists:projects,id'],
         ];
     }
 }
