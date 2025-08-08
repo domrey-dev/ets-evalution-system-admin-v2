@@ -70,7 +70,7 @@ RUN chmod -R 775 storage bootstrap/cache \
     && chown -R www-data:www-data .
 
 # Expose PHP-FPM port (default is 9000)
-EXPOSE 8000
+EXPOSE 8080
 
 # Start PHP-FPM server
 CMD ["php-fpm"]
