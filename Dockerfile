@@ -62,7 +62,15 @@ COPY docker/php.ini /usr/local/etc/php/conf.d/php.ini
 
 # Copy built app
 COPY --from=build /var/www/html /var/www/html
+
 RUN npm install && npm run build
+
+COPY docker/entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+
 EXPOSE 9000
 
 CMD ["php-fpm"]
