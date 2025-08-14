@@ -1,78 +1,50 @@
-# --- Stage 1: Build dependencies ---
+# --- Stage 1: Build Laravel ---
 FROM php:8.3-fpm AS build
 
+# Install PHP extensions & tools
 RUN apt-get update && apt-get install -y \
+    git \
+    curl \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
     libzip-dev \
     zip \
     unzip \
-    git \
-    curl \
-    libpq-dev \
-    libonig-dev \
-    build-essential \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd zip pdo pdo_mysql pgsql pdo_pgsql
+    && docker-php-ext-install pdo_mysql gd zip
 
-    # Optional: Install Node.js 20 (useful for Laravel Mix / Vite builds)
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs
+# Install Composer
+COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy composer from official image
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Copy composer files & install deps
+COPY . .
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
-# Copy project files
+# Copy application code
 COPY . .
 
-# Install dependencies without dev packages
-RUN composer install --no-dev --optimize-autoloader
-
-# Set permissions
-RUN chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+# Permissions
+RUN chown -R www-data:www-data storage bootstrap/cache
 
 # --- Stage 2: Production image ---
 FROM php:8.3-fpm
 
 WORKDIR /var/www/html
 
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    git \
-    curl \
-    libpq-dev \
-    libonig-dev \
-    build-essential \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd zip pdo pdo_mysql pgsql pdo_pgsql
+# Copy PHP extensions & configs
+COPY --from=build /usr/local/lib/php/extensions /usr/local/lib/php/extensions
+COPY --from=build /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
 
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs
-# Copy PHP config
-COPY docker/php.ini /usr/local/etc/php/conf.d/php.ini
-
-# Copy built app
+# Copy application
 COPY --from=build /var/www/html /var/www/html
 
-RUN npm install && npm run build
-
-COPY docker/entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh
-
-RUN chown -R www-data:www-data storage bootstrap/cache \
+# Permissions
+RUN mkdir -p storage bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
-
-ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 9000
 
