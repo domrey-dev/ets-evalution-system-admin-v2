@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   app:
-    build: .
+    image: reaksa7236/ets-evaluat-v2:dev-1.0.2
     container_name: laravel12-app
     restart: unless-stopped
     environment:
@@ -20,8 +20,6 @@ services:
       DB_USERNAME: pguser_dev
       DB_PASSWORD: 2tZxHFizMpxll5
     volumes:
-        # - ./public:/var/www/html/public
-        # - ./storage:/var/www/html/storage
         - .:/var/www/html
         - /var/www/html/vendor
     networks:
