@@ -16,14 +16,14 @@ services:
       DB_CONNECTION: pgsql
       DB_HOST: host.docker.internal
       DB_PORT: 5432
-      DB_DATABASE: T03
+      DB_DATABASE: T01
       DB_USERNAME: pguser_dev
       DB_PASSWORD: 2tZxHFizMpxll5
     volumes:
-        - ./public:/var/www/html/public
-        - ./storage:/var/www/html/storage
-        # - .:/var/www/html
-        # - /var/www/html/vendor
+        # - ./public:/var/www/html/public
+        # - ./storage:/var/www/html/storage
+        - .:/var/www/html
+        - /var/www/html/vendor
     networks:
       - laravel-net
 
