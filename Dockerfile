@@ -65,14 +65,14 @@ COPY --from=build /var/www/html /var/www/html
 
 RUN npm install && npm run build
 
-COPY docker/entrypoint.sh /entrypoint.sh
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-RUN chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+# RUN chown -R www-data:www-data storage bootstrap/cache \
+#     && chmod -R 775 storage bootstrap/cache
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 EXPOSE 9000
 
