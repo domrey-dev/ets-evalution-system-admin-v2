@@ -31,7 +31,8 @@ COPY . .
 # Install dependencies without dev packages
 RUN composer install --no-dev --optimize-autoloader
 
-# Set permissions
+COPY . .
+
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
@@ -65,9 +66,9 @@ COPY --from=build /var/www/html /var/www/html
 
 RUN npm install && npm run build
 
-# COPY docker/entrypoint.sh /entrypoint.sh
+COPY docker/entrypoint.sh /entrypoint.sh
 
-# RUN chmod +x /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
