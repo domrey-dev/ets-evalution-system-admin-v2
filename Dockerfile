@@ -69,6 +69,9 @@ COPY docker/entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
 ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 9000
