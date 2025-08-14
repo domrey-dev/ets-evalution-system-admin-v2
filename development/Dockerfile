@@ -58,10 +58,7 @@ COPY docker/php.ini /usr/local/etc/php/conf.d/php.ini
 # Copy the entire built application from the build stage
 COPY --from=build /var/www/html /var/www/html
 
-# Create the directories if they don't exist and set permissions
-RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Create the directories if they don't exist and set permission
 
 # Copy and set up the entrypoint script
 COPY docker/entrypoint.sh /entrypoint.sh
