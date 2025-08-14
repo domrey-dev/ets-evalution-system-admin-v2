@@ -58,7 +58,7 @@ COPY docker/php.ini /usr/local/etc/php/conf.d/php.ini
 # Copy the entire built application from the build stage
 COPY --from=build /var/www/html /var/www/html
 
-# Create the directories if they don't exist and set permission
+# Create the directories if they don't exist and set permissions
 
 # Copy and set up the entrypoint script
 COPY docker/entrypoint.sh /entrypoint.sh

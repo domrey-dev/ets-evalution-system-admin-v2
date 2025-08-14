@@ -1,0 +1,32 @@
+# OS / IDE junk
+.DS_Store
+Thumbs.db
+*.log
+
+# Node
+node_modules
+npm-debug.log
+yarn.lock
+
+# PHP
+vendor
+composer.lock
+
+# Laravel caches
+bootstrap/cache/*
+storage/*
+!storage/app
+!storage/framework
+!storage/logs
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Environment
+.env
+.env.*
