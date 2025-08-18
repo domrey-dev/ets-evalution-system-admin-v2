@@ -1,6 +1,7 @@
 # --- Stage 1: Build dependencies ---
 FROM php:8.3-fpm AS build
 
+# Install core dependencies
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg62-turbo-dev \
@@ -16,63 +17,56 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd zip pdo pdo_mysql pgsql pdo_pgsql
 
-    # Optional: Install Node.js 20 (useful for Laravel Mix / Vite builds)
+# Install Node.js 20
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
+# Set working directory
 WORKDIR /var/www/html
 
 # Copy composer from official image
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy project files
+# Copy project files and install dependencies
 COPY . .
-
-# Install dependencies without dev packages
 RUN composer install --no-dev --optimize-autoloader
 
-# Set permissions
-RUN chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+# Run frontend build
+RUN npm install && npm run build
 
 # --- Stage 2: Production image ---
 FROM php:8.3-fpm
 
-WORKDIR /var/www/html
-
+# Install runtime dependencies. Note: The build stage had extra deps for building
+# like git, curl, and build-essential, which aren't needed in the final image.
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
     libzip-dev \
-    zip \
-    unzip \
-    git \
-    curl \
     libpq-dev \
     libonig-dev \
-    build-essential \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd zip pdo pdo_mysql pgsql pdo_pgsql
 
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs
+# Set working directory
+WORKDIR /var/www/html
+
 # Copy PHP config
 COPY docker/php.ini /usr/local/etc/php/conf.d/php.ini
 
-# Copy built app
+# Copy the entire built application from the build stage
 COPY --from=build /var/www/html /var/www/html
 
-RUN npm install && npm run build
+# Create the directories if they don't exist and set permission
 
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+# Copy and set up the entrypoint script
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-# RUN chown -R www-data:www-data storage bootstrap/cache \
-#     && chmod -R 775 storage bootstrap/cache
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# The entrypoint script is responsible for setting permissions at runtime
+# to handle cases where volumes might be mounted.
+ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 9000
 
